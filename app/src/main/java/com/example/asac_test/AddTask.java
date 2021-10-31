@@ -47,7 +47,7 @@ int counter=0;
         TextView count=(TextView)findViewById(R.id.counter);
         if(text.isEmpty() && text2.isEmpty()){
             Toast message= Toast.makeText(getBaseContext(),"you should fill both fields first!",Toast.LENGTH_LONG);
-
+message.show();
         }
         else{
 counter++;
