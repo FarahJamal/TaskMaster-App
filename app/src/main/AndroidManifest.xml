@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ASACTest">
-        <activity android:name=".MyTasks"></activity>
+        <activity android:name=".SettingsPage"></activity>
+        <activity android:name=".TaskDetailPage" />
+        <activity android:name=".MyTasks" />
         <activity android:name=".AddTask" />
         <activity android:name=".AllTasks" />
         <activity android:name=".IntroActivity">

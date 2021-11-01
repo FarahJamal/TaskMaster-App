@@ -3,26 +3,25 @@ package com.example.asac_test;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.preference.PreferenceManager;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AddTask extends AppCompatActivity {
-//    SharedPreferences sharedpreferences;
-    public static final String MyPREFERENCES = "com.example.asac_test" ;
+public class SettingsPage extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_task);
-        //To have the back button!!
+        setContentView(R.layout.activity_settings_page);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
@@ -30,48 +29,42 @@ public class AddTask extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case android.R.id.home:
-Intent i=new Intent(AddTask.this,MyTasks.class);
-startActivity(i);
+                Intent i=new Intent(SettingsPage.this,AllTasks.class);
+                startActivity(i);
                 Toast.makeText(this,"Back button pressed!",Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
-int counter=0;
-
     public void click(View view) {
+        EditText username =(EditText) findViewById(R.id.username) ;
+        String user=username.getText().toString();
 
-        EditText editText =(EditText) findViewById(R.id.edit1) ;
-        String text=editText.getText().toString();
+        EditText email =(EditText) findViewById(R.id.email) ;
+        String mail=email.getText().toString();
+        EditText editText=(EditText)findViewById(R.id.editText);
+        int number=Integer.parseInt(editText.getText().toString());
 
-        EditText editText2 =(EditText) findViewById(R.id.edit2) ;
-        String text2=editText2.getText().toString();
-
-        TextView count=(TextView)findViewById(R.id.counter);
-        if(text.isEmpty() && text2.isEmpty()){
+        if(user.isEmpty() && mail.isEmpty() && editText==null ){
             Toast message= Toast.makeText(getBaseContext(),"you should fill both fields first!",Toast.LENGTH_LONG);
-message.show();
+            message.show();
         }
         else{
-counter++;
-            Intent i=new Intent(AddTask.this,AllTasks.class);
-            i.putExtra("edit1",text);
-            i.putExtra("edit2",text2);
-            i.putExtra("counter",counter);
-            Toast message= Toast.makeText(getBaseContext(),"you have successfully add your task!",Toast.LENGTH_LONG);
-            count.setText("total:"+counter);
+            Intent i=new Intent(SettingsPage.this,MyTasks.class);
+            i.putExtra("username",user);
+            i.putExtra("email",mail);
+            i.putExtra("number",number);
+            Toast message= Toast.makeText(getBaseContext(),"you have successfully added to my App as a user!",Toast.LENGTH_LONG);
             startActivity(i);
             message.show();
-
-//            sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("title",text );
-            editor.putString("description",text2 );
-            editor.putString("counter","total:"+counter );
+            editor.putString("username",user );
+            editor.putString("email",mail );
+            editor.putInt("number",number);
             editor.apply();
         }
 
-}
+
+    }
 }
