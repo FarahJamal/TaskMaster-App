@@ -24,13 +24,11 @@ public class TaskDetailPage extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
 
-            String t = extras.getString("title");
+            String t = extras.getString("titles");
                 String body=extras.getString("body");
                 String status=extras.getString("status");
-            if(t!=null){
-                title.setText(t);
-            }
-            else{
+
+
                 if(status.equalsIgnoreCase("completed"))
                     st.setTextColor(Color.GREEN);
                 else if(status.equalsIgnoreCase("in progress"))
@@ -41,7 +39,9 @@ public class TaskDetailPage extends AppCompatActivity {
                     st.setTextColor(Color.CYAN);
                 bodies.setText(body);
                 st.setText(status);
-            }
+           title.setText(t);
+
+
 
 
 

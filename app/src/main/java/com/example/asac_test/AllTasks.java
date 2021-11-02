@@ -34,10 +34,10 @@ public class AllTasks extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_tasks);
         ArrayList<Task>taskData=new ArrayList<>();
-        taskData.add(new Task("Study for mock interviews","In Progress"));
-        taskData.add(new Task("Finish the reading 28","In Progress"));
-        taskData.add(new Task("Watch movie","assigned"));
-        taskData.add(new Task("Finished code-challenge","Completed"));
+        taskData.add(new Task("study","Study for mock interviews","In Progress"));
+        taskData.add(new Task("read","Finish the reading 28","In Progress"));
+        taskData.add(new Task("fun","Watch movie","assigned"));
+        taskData.add(new Task("coding","Finished code-challenge","Completed"));
         RecyclerView allStudentRecyclerView = findViewById(R.id.recTask);
 
         allStudentRecyclerView.setLayoutManager(new LinearLayoutManager(this));

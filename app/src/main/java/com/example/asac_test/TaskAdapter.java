@@ -37,6 +37,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
                     Intent goToDetailsPage = new Intent(view.getContext(), TaskDetailPage.class);
                     goToDetailsPage.putExtra("body",allTasksData.get(getAdapterPosition()).getBody());
                     goToDetailsPage.putExtra("status",allTasksData.get(getAdapterPosition()).getStatus());
+                    goToDetailsPage.putExtra("title",allTasksData.get(getAdapterPosition()).getTitle());
                     view.getContext().startActivity(goToDetailsPage);
                 }
                 });
@@ -62,7 +63,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
         holder.task = allTasksData.get(position);
         TextView body = holder.itemView.findViewById(R.id.body);
         TextView status = holder.itemView.findViewById(R.id.status);
-
 
         body.setText(holder.task.body);
         status.setText(holder.task.status);

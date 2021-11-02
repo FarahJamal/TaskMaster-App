@@ -1,12 +1,22 @@
 package com.example.asac_test;
 
 public class Task {
+    String title;
     String body;
     String status;
 
-    public Task(String body, String status) {
+    public Task(String title,String body, String status) {
+        this.title=title;
         this.body = body;
         this.status = status;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getBody() {

@@ -20,11 +20,13 @@ public class AllTasksFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "body";
     private static final String ARG_PARAM2 = "status";
+    private static final String ARG_PARAM3 = "title";
 
 
     // TODO: Rename and change types of parameters
     private String body;
     private String status;
+    private String title;
 
     public AllTasksFragment() {
         // Required empty public constructor
@@ -36,14 +38,17 @@ public class AllTasksFragment extends Fragment {
      *
      * @param body Parameter 1.
      * @param status Parameter 2.
+     * @param title parameter 3.
      * @return A new instance of fragment AllTasksFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AllTasksFragment newInstance(String body, String status) {
+    public static AllTasksFragment newInstance(String title,String body, String status) {
         AllTasksFragment fragment = new AllTasksFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, body);
         args.putString(ARG_PARAM2, status);
+        args.putString(ARG_PARAM3, title);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,6 +58,8 @@ public class AllTasksFragment extends Fragment {
         if (getArguments() != null) {
             body = getArguments().getString(ARG_PARAM1);
             status = getArguments().getString(ARG_PARAM2);
+            title = getArguments().getString(ARG_PARAM3);
+
         }
     }
 
