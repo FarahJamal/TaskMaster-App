@@ -6,6 +6,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +23,8 @@ import android.widget.Toast;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AllTasks extends AppCompatActivity {
 
@@ -29,7 +33,16 @@ public class AllTasks extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_tasks);
+        ArrayList<Task>taskData=new ArrayList<>();
+        taskData.add(new Task("Study for mock interviews","In Progress"));
+        taskData.add(new Task("Finish the reading 28","In Progress"));
+        taskData.add(new Task("Watch movie","assigned"));
+        taskData.add(new Task("Finished code-challenge","Completed"));
+        RecyclerView allStudentRecyclerView = findViewById(R.id.recTask);
 
+        allStudentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        allStudentRecyclerView.setAdapter(new TaskAdapter(taskData));
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
     }

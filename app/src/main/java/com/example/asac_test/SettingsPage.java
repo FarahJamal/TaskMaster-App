@@ -45,7 +45,7 @@ public class SettingsPage extends AppCompatActivity {
         EditText editText=(EditText)findViewById(R.id.editText);
         int number=Integer.parseInt(editText.getText().toString());
 
-        if(user.isEmpty() && mail.isEmpty() && editText==null ){
+        if(user.isEmpty() && mail.isEmpty() && (editText.getText().toString().isEmpty() || editText.getText().toString() =="") ){
             Toast message= Toast.makeText(getBaseContext(),"you should fill both fields first!",Toast.LENGTH_LONG);
             message.show();
         }

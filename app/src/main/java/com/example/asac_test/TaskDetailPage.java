@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -17,13 +18,37 @@ public class TaskDetailPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail_page);
         TextView title=(TextView)findViewById(R.id.title);
+        TextView bodies=(TextView)findViewById(R.id.text);
+        TextView st=(TextView)findViewById(R.id.status);
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String t = extras.getString("title");
 
-            title.setText(t);
+            String t = extras.getString("title");
+                String body=extras.getString("body");
+                String status=extras.getString("status");
+            if(t!=null){
+                title.setText(t);
+            }
+            else{
+                if(status.equalsIgnoreCase("completed"))
+                    st.setTextColor(Color.GREEN);
+                else if(status.equalsIgnoreCase("in progress"))
+                    st.setTextColor(Color.YELLOW);
+                else if(status.equalsIgnoreCase("assigned"))
+                    st.setTextColor(Color.RED);
+                else
+                    st.setTextColor(Color.CYAN);
+                bodies.setText(body);
+                st.setText(status);
+            }
+
+
+
+
 
         }
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
     }

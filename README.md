@@ -25,3 +25,16 @@
 ![](/screenshots/setting.png)
 ### task Detail
 ![](/screenshots/taskDetail.png)
+
+## lab28
+- **Add the ability to choose tasks from recyclerview and show it on another page**
+
+### all tasks
+![](/screenshots/alltasks-lab28.png)
+
+### task Detail
+![](/screenshots/taskDetails-rec.png)
+![](/screenshots/taskdetail-rec-2.png)
+
+### task Detail with normal button
+![](/screenshots/taskDetail.png)
