@@ -9,14 +9,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.asac_test.DataBase.AppDatabase;
+import com.example.asac_test.Entity.TaskEntity;
+
 public class AddTask extends AppCompatActivity {
-//    SharedPreferences sharedpreferences;
+    String assigned="";
+     RadioGroup radioGroup;
+        RadioButton selectedRadioButton; 
+    //    SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "com.example.asac_test" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +34,7 @@ public class AddTask extends AppCompatActivity {
         //To have the back button!!
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+                radioGroup = (RadioGroup) findViewById(R.id.radio);
     }
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -47,6 +57,7 @@ int counter=0;
 
         EditText editText2 =(EditText) findViewById(R.id.edit2) ;
         String text2=editText2.getText().toString();
+
 
         TextView count=(TextView)findViewById(R.id.counter);
         if(text.isEmpty() && text2.isEmpty()){
@@ -73,5 +84,27 @@ counter++;
             editor.apply();
         }
 
+
+
+
+
+
+
+
+         // get the selected RadioButton of the group
+                selectedRadioButton  = (RadioButton)findViewById(radioGroup.getCheckedRadioButtonId());
+                //get RadioButton text
+                String yourVote = selectedRadioButton.getText().toString();
+                // display it as Toast to the user
+                Toast.makeText(AddTask.this, "Selected Radio Button is:" + yourVote , Toast.LENGTH_LONG).show();
+                                       Log.v("selected radio ==>",yourVote);
+
+
+        //Save a TaskModel
+        TaskEntity taskModel = new TaskEntity(text, text2, yourVote);
+        AppDatabase.getInstance(getApplicationContext()).taskDAO().insert(taskModel);
+        Intent intent = new Intent(AddTask.this, AllTasks.class);
+        startActivity(intent);
 }
+
 }

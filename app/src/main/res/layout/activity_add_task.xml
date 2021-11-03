@@ -4,28 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddTask"
-    android:background="@color/purple">
+    android:background="@color/purple"
+    tools:context=".AddTask">
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="196dp"
+        android:layout_marginBottom="660dp"
         android:text="Add Task"
         android:textColor="@color/white"
         android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/edit1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
+        android:id="@+id/imageView3"
         android:layout_width="364dp"
         android:layout_height="120dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="40dp"
         android:src="@drawable/p4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintHorizontal_bias="0.319"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -34,18 +35,15 @@
         android:id="@+id/edit1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
         android:background="@drawable/edit_text_border"
         android:backgroundTint="@color/white"
         android:hint="Task Title"
         android:inputType="text"
         android:padding="12dp"
         app:layout_constraintBaseline_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.516" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        tools:layout_editor_absoluteX="0dp" />
 
     <EditText
 
@@ -63,7 +61,58 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit1"
-        app:layout_constraintVertical_bias="0.642" />
+        app:layout_constraintVertical_bias="0.263" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+android:id="@+id/radio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.672">
+
+        <RadioButton
+            android:id="@+id/completed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20px"
+            android:text="completed"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/in_progress"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:padding="20px"
+            android:text="in progress"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/new_task"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:padding="20px"
+            android:text="New"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/assigned"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:padding="20px"
+            android:text="assigned"
+            android:textColor="@color/white" />
+    </RadioGroup>
 
     <Button
 
@@ -78,9 +127,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.784"
-        />
-
+        app:layout_constraintVertical_bias="0.784" />
 
 
     <TextView
@@ -89,8 +136,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="76dp"
         android:text="total:0"
-        android:textSize="20sp"
         android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.043"

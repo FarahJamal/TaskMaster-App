@@ -38,3 +38,19 @@
 
 ### task Detail with normal button
 ![](/screenshots/taskDetail.png)
+
+## lab29
+- **Add the ability to choose tasks from recyclerview and show it from database**
+
+### all tasks
+![](/screenshots/All.png)
+![](/screenshots/All2.png)
+
+
+### task Detail
+![](/screenshots/lab29-details.png)
+![](/screenshots/lab29-details2.png)
+
+### add task
+![](/screenshots/lab29-add.png)
+

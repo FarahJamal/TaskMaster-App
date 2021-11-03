@@ -20,6 +20,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.asac_test.DataBase.AppDatabase;
+import com.example.asac_test.Entity.TaskEntity;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,16 +36,18 @@ public class AllTasks extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_tasks);
-        ArrayList<Task>taskData=new ArrayList<>();
-        taskData.add(new Task("study","Study for mock interviews","In Progress"));
-        taskData.add(new Task("read","Finish the reading 28","In Progress"));
-        taskData.add(new Task("fun","Watch movie","assigned"));
-        taskData.add(new Task("coding","Finished code-challenge","Completed"));
+//        ArrayList<Task>taskData=new ArrayList<>();
+//        taskData.add(new Task("study","Study for mock interviews","In Progress"));
+//        taskData.add(new Task("read","Finish the reading 28","In Progress"));
+//        taskData.add(new Task("fun","Watch movie","assigned"));
+//        taskData.add(new Task("coding","Finished code-challenge","Completed"));
+        List<TaskEntity> taskData = AppDatabase.getInstance(getApplicationContext()).taskDAO().getAll();
+
         RecyclerView allStudentRecyclerView = findViewById(R.id.recTask);
 
         allStudentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        allStudentRecyclerView.setAdapter(new TaskAdapter(taskData));
+        allStudentRecyclerView.setAdapter(new TaskAdapter((ArrayList<TaskEntity>) taskData));
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
     }

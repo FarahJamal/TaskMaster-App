@@ -12,19 +12,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.*;
 
+import com.example.asac_test.Entity.TaskEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
 
-    List<Task> allTasksData = new ArrayList<>();
-    public  TaskAdapter (ArrayList<Task> allTasksData) {
+    List<TaskEntity> allTasksData = new ArrayList<>();
+    public  TaskAdapter (ArrayList<TaskEntity> allTasksData) {
         this.allTasksData = allTasksData;
     }
 
     public class TaskHolder extends RecyclerView.ViewHolder {
 
-        public Task task;
+        public TaskEntity task;
         View itemView;
         public TaskHolder(@NonNull View itemView) {
             super(itemView);
@@ -33,11 +35,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("my Adapter", "Element " + allTasksData.get(getAdapterPosition()).getBody() + " clicked");
+                    Log.d("my Adapter", "Element " + allTasksData.get(getAdapterPosition()).body+ " clicked");
                     Intent goToDetailsPage = new Intent(view.getContext(), TaskDetailPage.class);
-                    goToDetailsPage.putExtra("body",allTasksData.get(getAdapterPosition()).getBody());
-                    goToDetailsPage.putExtra("status",allTasksData.get(getAdapterPosition()).getStatus());
-                    goToDetailsPage.putExtra("title",allTasksData.get(getAdapterPosition()).getTitle());
+                    goToDetailsPage.putExtra("body",allTasksData.get(getAdapterPosition()).body);
+                    goToDetailsPage.putExtra("status",allTasksData.get(getAdapterPosition()).status);
+                    goToDetailsPage.putExtra("title",allTasksData.get(getAdapterPosition()).title);
                     view.getContext().startActivity(goToDetailsPage);
                 }
                 });
