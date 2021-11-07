@@ -96,6 +96,16 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText"
         app:layout_constraintVertical_bias="0.645" />
-
+    <com.ismaeldivita.chipnavigation.ChipNavigationBar
+        android:id="@+id/chip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        app:cnb_menuResource="@menu/menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.991"
+        tools:layout_editor_absoluteX="51dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

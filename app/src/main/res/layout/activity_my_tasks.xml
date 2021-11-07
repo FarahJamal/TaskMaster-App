@@ -63,29 +63,28 @@
         android:id="@+id/addTask"
         android:layout_width="160dp"
         android:layout_height="76dp"
-        android:layout_marginBottom="96dp"
+        android:layout_marginBottom="156dp"
+        android:backgroundTint="@color/purple_200"
+        android:onClick="add"
+        android:text="@string/add_task"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.107"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="@string/add_task"
-        android:onClick="add"
-        android:backgroundTint="@color/purple_200"
-        />
+        app:layout_constraintHorizontal_bias="0.063"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:backgroundTint="@color/purple_200"
-
         android:id="@+id/allTasks"
+
         android:layout_width="160dp"
         android:layout_height="76dp"
-        android:layout_marginBottom="96dp"
+        android:layout_marginBottom="156dp"
+        android:backgroundTint="@color/purple_200"
+        android:onClick="all"
+        android:text="@string/all_tasks"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.645"
-        app:layout_constraintStart_toEndOf="@+id/addTask"
-        android:text="@string/all_tasks"
-        android:onClick="all"/>
+        app:layout_constraintHorizontal_bias="0.546"
+        app:layout_constraintStart_toEndOf="@+id/addTask" />
 
     <Button
         android:id="@+id/setting"
@@ -101,5 +100,17 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/allTasks"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.105" />
+
+    <com.ismaeldivita.chipnavigation.ChipNavigationBar
+android:id="@+id/chip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        app:cnb_menuResource="@menu/menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.991"
+        tools:layout_editor_absoluteX="51dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

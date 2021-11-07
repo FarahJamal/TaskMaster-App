@@ -9,21 +9,54 @@ import androidx.preference.PreferenceManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
+
+import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 public class SettingsPage extends AppCompatActivity {
-
+ChipNavigationBar chipNavigationBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_page);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setTitle(getTitle());
+        chipNavigationBar=findViewById(R.id.chip);
+        chipNavigationBar.setOnItemSelectedListener(i -> {
+            Log.v("id => ",i+"");
+            Log.v("id value => ",R.id.item2+"");
+
+            switch (i){
+                case R.id.item0:
+                {
+                    Intent activity1=new Intent(getBaseContext(),MyTasks.class);
+                    startActivity(activity1);
+                }
+
+                case R.id.item1: {
+                    Intent activity2 = new Intent(getBaseContext(), AddTask.class);
+                    startActivity(activity2);
+                }
+
+                case R.id.item2: {
+                    Intent activity3 = new Intent(getBaseContext(), SettingsPage.class);
+                    startActivity(activity3);
+                }
+
+                case R.id.item3: {
+                    Intent activity4 = new Intent(getBaseContext(), AllTasks.class);
+                    startActivity(activity4);
+                }
+            }
+        });
     }
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
