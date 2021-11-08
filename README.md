@@ -55,4 +55,4 @@
 ![](/screenshots/lab29-add.png)
 
 ## lab 31
-![](/screenshots/setting.png)(/screenshots/lab31.mp4)
+[![Watch the video](/screenshots/setting.png)](/screenshots/lab31.mp4)
