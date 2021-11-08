@@ -55,4 +55,5 @@
 ![](/screenshots/lab29-add.png)
 
 ## lab 31
+#### click to watch video :).
 [![Watch the video](/screenshots/setting.png)](/screenshots/lab31.mp4)
