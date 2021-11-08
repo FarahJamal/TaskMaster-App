@@ -18,12 +18,16 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.Status;
+import com.amplifyframework.datastore.generated.model.TaskMaster;
 import com.example.asac_test.DataBase.AppDatabase;
 import com.example.asac_test.Entity.TaskEntity;
 
 public class AddTask extends AppCompatActivity {
-    String assigned="";
-     RadioGroup radioGroup;
+    private static final String TAG ="AddTask" ;
+Status vote=null;
+    RadioGroup radioGroup;
         RadioButton selectedRadioButton; 
     //    SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "com.example.asac_test" ;
@@ -49,7 +53,35 @@ startActivity(i);
     }
 
 int counter=0;
+    private void dataStore(String title,String body,Status status){
+        TaskMaster task = TaskMaster.builder()
+                .title(title)
+                .status(status)
+                .body(body)
+                .build();
 
+        // save with the datastore
+        Amplify.DataStore.save(task, result -> {
+            Log.i(TAG, "Task Saved");
+        }, error -> {
+            Log.i(TAG, "Task Not Saved");
+        });
+
+        // query with the datastore
+        Amplify.DataStore.query(
+                TaskMaster.class,
+                queryMatches -> {
+                    while (queryMatches.hasNext()) {
+                        Log.i(TAG, "Successful query, found tasks.");
+                        TaskMaster taskMaster = queryMatches.next();
+                        Log.i(TAG, taskMaster.getTitle());
+//                        label.setText(taskMaster.getTitle());
+                    }
+                },
+                error -> {
+                    Log.i(TAG,  "Error retrieving tasks", error);
+                });
+    }
     public void click(View view) {
 
         EditText editText =(EditText) findViewById(R.id.edit1) ;
@@ -60,6 +92,7 @@ int counter=0;
 
 
         TextView count=(TextView)findViewById(R.id.counter);
+
         if(text.isEmpty() && text2.isEmpty()){
             Toast message= Toast.makeText(getBaseContext(),"you should fill both fields first!",Toast.LENGTH_LONG);
 message.show();
@@ -99,6 +132,19 @@ counter++;
                 Toast.makeText(AddTask.this, "Selected Radio Button is:" + yourVote , Toast.LENGTH_LONG).show();
                                        Log.v("selected radio ==>",yourVote);
 
+if(yourVote=="new"){
+    vote=Status.NEW;
+}
+else if(yourVote=="completed"){
+    vote=Status.COMPLETED;
+}
+else if(yourVote =="in_progress"){
+    vote=Status.IN_PROGRESS;
+}
+else{
+    vote=Status.NEWVALUE;
+}
+        dataStore(editText.getText().toString(),editText2.getText().toString(),vote);
 
         //Save a TaskModel
         TaskEntity taskModel = new TaskEntity(text, text2, yourVote);

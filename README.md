@@ -57,3 +57,13 @@
 ## lab 31
 #### click to watch video :).
 [![Watch the video](/screenshots/setting.png)](/screenshots/lab31.mp4)
+
+## lab 32
+**Today, TaskMaster app  gain a scalable backend by using AWS Amplify. 
+We’ll continue to work with Amplify to add more cloud functionality for the rest of the Project.**
+![](/screenshots/l32.png)
+![](/screenshots/l32-3.png)
+![](/screenshots/l32-4.png)
+![](/screenshots/l32-5.png)
+##### DynamoDB Page AWS
+![](/screenshots/l32-2.png)

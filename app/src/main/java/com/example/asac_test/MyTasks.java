@@ -60,7 +60,7 @@ public class MyTasks extends AppCompatActivity {
                     startActivity(activity2);
                 }
 
-                case 2131230987: {
+                case R.id.item2: {
                     Log.v("id => ",i+"");
 
                     Intent activity3 = new Intent(getBaseContext(), SettingsPage.class);
@@ -152,5 +152,6 @@ public class MyTasks extends AppCompatActivity {
                 () -> Log.i("Tutorial", "Observation complete.")
         );
     }
+
     /********/
 }
