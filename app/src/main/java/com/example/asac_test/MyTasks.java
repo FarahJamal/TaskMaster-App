@@ -15,17 +15,31 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomappbar.BottomAppBar;
+import com.amplifyframework.AmplifyException;
+import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.AWSDataStorePlugin;
+
+import com.amplifyframework.datastore.generated.model.Status;
+import com.amplifyframework.datastore.generated.model.TaskMaster;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 
 public class MyTasks extends AppCompatActivity {
+    private static final String TAG ="MyTasks" ;
     ChipNavigationBar chipNavigationBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_tasks);
+
+        /**AWS stuff**/
+
+        configureAmplify();
+
+        /**end here**/
+
         chipNavigationBar=findViewById(R.id.chip);
         chipNavigationBar.setOnItemSelectedListener(i -> {
             Log.v("id value => ",i+"");
@@ -61,7 +75,36 @@ public class MyTasks extends AppCompatActivity {
                 }
             }
         });
-    }
+        //     Amplify.DataStore.save(item,
+//    success -> Log.i("Tutorial", "Saved item: " + success.item().getTitle()),
+//    error -> Log.e("Tutorial", "Could not save item to DataStore", error)
+//            );
+
+//        Amplify.DataStore.query(TaskMaster.class,
+//                tasks -> {
+//                    while (tasks.hasNext()) {
+//                        TaskMaster task = tasks.next();
+//
+//                        Log.i("Tutorial", "==== Todo ====");
+//                        Log.i("Tutorial", "Name: " + task.getTitle());
+//
+//                        if (task.getStatus() != null) {
+//                            Log.i("Tutorial", "Priority: " + task.getStatus().toString());
+//                        }
+//
+//                        if (task.getBody() != null) {
+//                            Log.i("Tutorial", "CompletedAt: " + task.getBody().toString());
+//                        }
+//                    }
+//                },
+//                failure -> Log.e("Tutorial", "Could not query DataStore", failure)
+//        );
+           }
+//    TaskMaster item = TaskMaster.builder()
+//            .title("Build Android application")
+//            .status(Status.IN_PROGRESS)
+//            .body("complete building this App with Amplify and AWS ... ")
+//            .build();
 
 
     public void add(View view) {
@@ -92,4 +135,22 @@ public class MyTasks extends AppCompatActivity {
         startActivity(i);
 
     }
+    /***AWS**/
+    private void configureAmplify() {
+        try {
+            Amplify.addPlugin(new AWSApiPlugin());
+            Amplify.addPlugin(new AWSDataStorePlugin());
+            Amplify.configure(getApplicationContext());
+            Log.i("Tutorial", "Initialized Amplify");
+        } catch (AmplifyException failure) {
+            Log.e("Tutorial", "Could not initialize Amplify", failure);
+        }
+        Amplify.DataStore.observe(TaskMaster.class,
+                started -> Log.i("Tutorial", "Observation began."),
+                change -> Log.i("Tutorial", change.item().toString()),
+                failure -> Log.e("Tutorial", "Observation failed.", failure),
+                () -> Log.i("Tutorial", "Observation complete.")
+        );
+    }
+    /********/
 }

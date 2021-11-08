@@ -1,0 +1,13 @@
+enum Status {
+  NEW
+  COMPLETED
+  IN_PROGRESS
+  NEWVALUE
+}
+
+type TaskMaster @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  title: String!
+  body: String
+  status: Status!
+}
