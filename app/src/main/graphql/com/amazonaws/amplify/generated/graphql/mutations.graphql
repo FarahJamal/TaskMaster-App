@@ -1,0 +1,133 @@
+# this is an auto generated file. This will be overwritten
+mutation CreateTaskMaster(
+  $input: CreateTaskMasterInput!
+  $condition: ModelTaskMasterConditionInput
+) {
+  createTaskMaster(input: $input, condition: $condition) {
+    id
+    title
+    body
+    status
+    teamID
+    team {
+      id
+      name
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateTaskMaster(
+  $input: UpdateTaskMasterInput!
+  $condition: ModelTaskMasterConditionInput
+) {
+  updateTaskMaster(input: $input, condition: $condition) {
+    id
+    title
+    body
+    status
+    teamID
+    team {
+      id
+      name
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteTaskMaster(
+  $input: DeleteTaskMasterInput!
+  $condition: ModelTaskMasterConditionInput
+) {
+  deleteTaskMaster(input: $input, condition: $condition) {
+    id
+    title
+    body
+    status
+    teamID
+    team {
+      id
+      name
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateTeam(
+  $input: CreateTeamInput!
+  $condition: ModelTeamConditionInput
+) {
+  createTeam(input: $input, condition: $condition) {
+    id
+    name
+    tasks {
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateTeam(
+  $input: UpdateTeamInput!
+  $condition: ModelTeamConditionInput
+) {
+  updateTeam(input: $input, condition: $condition) {
+    id
+    name
+    tasks {
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteTeam(
+  $input: DeleteTeamInput!
+  $condition: ModelTeamConditionInput
+) {
+  deleteTeam(input: $input, condition: $condition) {
+    id
+    name
+    tasks {
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}

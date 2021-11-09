@@ -4,10 +4,18 @@ enum Status {
   IN_PROGRESS
   NEWVALUE
 }
-
-type TaskMaster @model @auth(rules: [{allow: public}]) {
+type TaskMaster @model
+@key(name: "byTeam", fields: ["teamID", "title"]){
   id: ID!
   title: String!
   body: String
-  status: Status!
+  status:Status!
+  teamID:ID!
+  team:Team! @connection(fields:["teamID"])
+}
+
+type Team @model{
+  id: ID!
+  name: String!
+  tasks: [TaskMaster] @connection(keyName:"byTeam",fields:["id"])
 }

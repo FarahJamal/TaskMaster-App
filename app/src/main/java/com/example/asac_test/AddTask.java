@@ -5,7 +5,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,15 +17,22 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Status;
 import com.amplifyframework.datastore.generated.model.TaskMaster;
+import com.amplifyframework.datastore.generated.model.Team;
 import com.example.asac_test.DataBase.AppDatabase;
 import com.example.asac_test.Entity.TaskEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddTask extends AppCompatActivity {
     private static final String TAG ="AddTask" ;
 Status vote=null;
+    List<Team> teams=new ArrayList<>();
     RadioGroup radioGroup;
         RadioButton selectedRadioButton; 
     //    SharedPreferences sharedpreferences;
@@ -35,6 +41,7 @@ Status vote=null;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+
         //To have the back button!!
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -54,18 +61,19 @@ startActivity(i);
 
 int counter=0;
     private void dataStore(String title,String body,Status status){
-        TaskMaster task = TaskMaster.builder()
-                .title(title)
-                .status(status)
-                .body(body)
-                .build();
+//        TaskMaster task = TaskMaster.builder()
+//
+//                .title("")
+//                .state(Status.IN_PROGRESS)
+//                .build();
+
 
         // save with the datastore
-        Amplify.DataStore.save(task, result -> {
-            Log.i(TAG, "Task Saved");
-        }, error -> {
-            Log.i(TAG, "Task Not Saved");
-        });
+//        Amplify.DataStore.save(task, result -> {
+//            Log.i(TAG, "Task Saved");
+//        }, error -> {
+//            Log.i(TAG, "Task Not Saved");
+//        });
 
         // query with the datastore
         Amplify.DataStore.query(
@@ -144,7 +152,37 @@ else if(yourVote =="in_progress"){
 else{
     vote=Status.NEWVALUE;
 }
-        dataStore(editText.getText().toString(),editText2.getText().toString(),vote);
+        Team team=Team.builder()
+                .name("test")
+
+                .build();
+
+        Amplify.API.query(
+                ModelQuery.list(com.amplifyframework.datastore.generated.model.Team.class),
+                response -> {
+                    for (Team todo : response.getData()) {
+//                        Log.i("MyAmplifyApp", todo.getName());
+
+                              teams.add(todo);
+                        System.out.println(teams);
+                    }
+                },
+                error -> Log.e("MyAmplifyApp", "Query failure", error)
+        );
+
+        TaskMaster taskMaster = TaskMaster.builder()
+                .title("ok")
+                .status(Status.COMPLETED)
+                .team(team)
+                .body("taskBodyInputAddPage.getText().toString()")
+
+                .build();
+
+        Amplify.API.mutate(
+                ModelMutation.create(taskMaster),
+                response -> Log.i("MyAmplifyApp", "Added Todo with id: " + 2),
+                error -> Log.e("MyAmplifyApp", "Create failed", error)
+        );
 
         //Save a TaskModel
         TaskEntity taskModel = new TaskEntity(text, text2, yourVote);
