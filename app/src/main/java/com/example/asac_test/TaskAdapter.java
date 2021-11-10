@@ -1,5 +1,6 @@
 package com.example.asac_test;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.*;
 
+import com.amplifyframework.datastore.generated.model.TaskMaster;
 import com.example.asac_test.Entity.TaskEntity;
 
 import java.util.ArrayList;
@@ -20,9 +22,16 @@ import java.util.List;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
 
     List<TaskEntity> allTasksData = new ArrayList<>();
+    List<TaskMaster> allTask = new ArrayList<>();
+Context context;
     public  TaskAdapter (ArrayList<TaskEntity> allTasksData) {
         this.allTasksData = allTasksData;
     }
+    public TaskAdapter(List<TaskMaster> allTask, Context context) {
+        this.allTask = allTask;
+        this.context=context;
+    }
+
 
     public class TaskHolder extends RecyclerView.ViewHolder {
 

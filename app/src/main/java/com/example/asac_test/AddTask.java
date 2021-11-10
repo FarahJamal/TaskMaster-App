@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
+import androidx.room.Room;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Status;
 import com.amplifyframework.datastore.generated.model.TaskMaster;
 import com.amplifyframework.datastore.generated.model.Team;
+import com.example.asac_test.DAO.TaskDAO;
 import com.example.asac_test.DataBase.AppDatabase;
 import com.example.asac_test.Entity.TaskEntity;
 
@@ -30,11 +33,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddTask extends AppCompatActivity {
+    private AppDatabase appDataBase;
+    TaskDAO taskDao;
     private static final String TAG ="AddTask" ;
-Status vote=null;
-    List<Team> teams=new ArrayList<>();
+    Status vote=null;
     RadioGroup radioGroup;
-        RadioButton selectedRadioButton; 
+    RadioButton selectedRadioButton;
+    List<Team> teams=new ArrayList<>();
     //    SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "com.example.asac_test" ;
     @Override
@@ -42,53 +47,56 @@ Status vote=null;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
+        appDataBase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"task").allowMainThreadQueries().build();
+        taskDao =appDataBase.taskDAO();
+        addTeam();
+
         //To have the back button!!
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-                radioGroup = (RadioGroup) findViewById(R.id.radio);
+        radioGroup = (RadioGroup) findViewById(R.id.radio);
     }
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
 
             case android.R.id.home:
-Intent i=new Intent(AddTask.this,MyTasks.class);
-startActivity(i);
+                Intent i=new Intent(AddTask.this,MyTasks.class);
+                startActivity(i);
                 Toast.makeText(this,"Back button pressed!",Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-int counter=0;
-    private void dataStore(String title,String body,Status status){
-//        TaskMaster task = TaskMaster.builder()
-//
-//                .title("")
-//                .state(Status.IN_PROGRESS)
-//                .build();
+    int counter=0;
+    private void dataStore(String title,String body,Status status,Team team){
+        TaskMaster taskMaster = TaskMaster.builder()
+                .title(title)
+.status(status)
+                .team(team)
+                .body(body)
+                .build();
+
+        Amplify.API.mutate(
+                ModelMutation.create(taskMaster),
+                response -> Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData().getId()),
+                error -> Log.e("MyAmplifyApp", "Create failed", error)
+        );
 
 
-        // save with the datastore
-//        Amplify.DataStore.save(task, result -> {
-//            Log.i(TAG, "Task Saved");
-//        }, error -> {
-//            Log.i(TAG, "Task Not Saved");
-//        });
+    }
+    public void addTeam(){
 
-        // query with the datastore
-        Amplify.DataStore.query(
-                TaskMaster.class,
-                queryMatches -> {
-                    while (queryMatches.hasNext()) {
-                        Log.i(TAG, "Successful query, found tasks.");
-                        TaskMaster taskMaster = queryMatches.next();
-                        Log.i(TAG, taskMaster.getTitle());
-//                        label.setText(taskMaster.getTitle());
+        Amplify.API.query(
+                ModelQuery.list(com.amplifyframework.datastore.generated.model.Team.class),
+                response -> {
+                    for (Team todo : response.getData()) {
+                        teams.add(todo);
+                        System.out.println(teams);
                     }
                 },
-                error -> {
-                    Log.i(TAG,  "Error retrieving tasks", error);
-                });
+                error -> Log.e("MyAmplifyApp", "Query failure", error)
+        );
     }
     public void click(View view) {
 
@@ -103,26 +111,16 @@ int counter=0;
 
         if(text.isEmpty() && text2.isEmpty()){
             Toast message= Toast.makeText(getBaseContext(),"you should fill both fields first!",Toast.LENGTH_LONG);
-message.show();
+            message.show();
         }
         else{
-counter++;
+            counter++;
             Intent i=new Intent(AddTask.this,AllTasks.class);
-            i.putExtra("edit1",text);
-            i.putExtra("edit2",text2);
-            i.putExtra("counter",counter);
+
             Toast message= Toast.makeText(getBaseContext(),"you have successfully add your task!",Toast.LENGTH_LONG);
-            count.setText("total:"+counter);
             startActivity(i);
             message.show();
 
-//            sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("title",text );
-            editor.putString("description",text2 );
-            editor.putString("counter","total:"+counter );
-            editor.apply();
         }
 
 
@@ -132,63 +130,33 @@ counter++;
 
 
 
-         // get the selected RadioButton of the group
-                selectedRadioButton  = (RadioButton)findViewById(radioGroup.getCheckedRadioButtonId());
-                //get RadioButton text
-                String yourVote = selectedRadioButton.getText().toString();
-                // display it as Toast to the user
-                Toast.makeText(AddTask.this, "Selected Radio Button is:" + yourVote , Toast.LENGTH_LONG).show();
-                                       Log.v("selected radio ==>",yourVote);
+        // get the selected RadioButton of the group
+        selectedRadioButton  = (RadioButton)findViewById(radioGroup.getCheckedRadioButtonId());
+        //get RadioButton text
+        String yourVote = selectedRadioButton.getText().toString();
+        // display it as Toast to the user
+        Toast.makeText(AddTask.this, "Selected Radio Button is:" + yourVote , Toast.LENGTH_LONG).show();
+        Log.v("selected radio ==>",yourVote);
 
-if(yourVote=="new"){
-    vote=Status.NEW;
-}
-else if(yourVote=="completed"){
-    vote=Status.COMPLETED;
-}
-else if(yourVote =="in_progress"){
-    vote=Status.IN_PROGRESS;
-}
-else{
-    vote=Status.NEWVALUE;
-}
-        Team team=Team.builder()
-                .name("test")
-
-                .build();
-
-        Amplify.API.query(
-                ModelQuery.list(com.amplifyframework.datastore.generated.model.Team.class),
-                response -> {
-                    for (Team todo : response.getData()) {
-//                        Log.i("MyAmplifyApp", todo.getName());
-
-                              teams.add(todo);
-                        System.out.println(teams);
-                    }
-                },
-                error -> Log.e("MyAmplifyApp", "Query failure", error)
-        );
-
-        TaskMaster taskMaster = TaskMaster.builder()
-                .title("ok")
-                .status(Status.COMPLETED)
-                .team(team)
-                .body("taskBodyInputAddPage.getText().toString()")
-
-                .build();
-
-        Amplify.API.mutate(
-                ModelMutation.create(taskMaster),
-                response -> Log.i("MyAmplifyApp", "Added Todo with id: " + 2),
-                error -> Log.e("MyAmplifyApp", "Create failed", error)
-        );
+        if(yourVote=="new"){
+            vote=Status.NEW;
+        }
+        else if(yourVote=="completed"){
+            vote=Status.COMPLETED;
+        }
+        else if(yourVote =="in_progress"){
+            vote=Status.IN_PROGRESS;
+        }
+        else{
+            vote=Status.NEWVALUE;
+        }
+        dataStore(text,text2,Status.IN_PROGRESS,teams.get(0));
 
         //Save a TaskModel
         TaskEntity taskModel = new TaskEntity(text, text2, yourVote);
         AppDatabase.getInstance(getApplicationContext()).taskDAO().insert(taskModel);
         Intent intent = new Intent(AddTask.this, AllTasks.class);
         startActivity(intent);
-}
+    }
 
 }

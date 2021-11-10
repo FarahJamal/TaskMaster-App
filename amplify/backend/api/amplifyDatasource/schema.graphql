@@ -19,3 +19,4 @@ type Team @model{
   name: String!
   tasks: [TaskMaster] @connection(keyName:"byTeam",fields:["id"])
 }
+ 

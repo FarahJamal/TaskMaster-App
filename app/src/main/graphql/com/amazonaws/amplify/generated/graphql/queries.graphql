@@ -1,32 +1,4 @@
 # this is an auto generated file. This will be overwritten
-query SyncTaskMasters(
-  $filter: ModelTaskMasterFilterInput
-  $limit: Int
-  $nextToken: String
-  $lastSync: AWSTimestamp
-) {
-  syncTaskMasters(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    lastSync: $lastSync
-  ) {
-    items {
-      id
-      title
-      body
-      status
-      teamID
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-    nextToken
-    startedAt
-  }
-}
 query GetTaskMaster($id: ID!) {
   getTaskMaster(id: $id) {
     id
@@ -37,15 +9,12 @@ query GetTaskMaster($id: ID!) {
     team {
       id
       name
-      _version
-      _deleted
-      _lastChangedAt
+      tasks {
+        nextToken
+      }
       createdAt
       updatedAt
     }
-    _version
-    _deleted
-    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -62,39 +31,16 @@ query ListTaskMasters(
       body
       status
       teamID
-      _version
-      _deleted
-      _lastChangedAt
+      team {
+        id
+        name
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
     nextToken
-    startedAt
-  }
-}
-query SyncTeams(
-  $filter: ModelTeamFilterInput
-  $limit: Int
-  $nextToken: String
-  $lastSync: AWSTimestamp
-) {
-  syncTeams(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    lastSync: $lastSync
-  ) {
-    items {
-      id
-      name
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-    nextToken
-    startedAt
   }
 }
 query GetTeam($id: ID!) {
@@ -102,12 +48,17 @@ query GetTeam($id: ID!) {
     id
     name
     tasks {
+      items {
+        id
+        title
+        body
+        status
+        teamID
+        createdAt
+        updatedAt
+      }
       nextToken
-      startedAt
     }
-    _version
-    _deleted
-    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -121,13 +72,12 @@ query ListTeams(
     items {
       id
       name
-      _version
-      _deleted
-      _lastChangedAt
+      tasks {
+        nextToken
+      }
       createdAt
       updatedAt
     }
     nextToken
-    startedAt
   }
 }

@@ -9,15 +9,12 @@ subscription OnCreateTaskMaster {
     team {
       id
       name
-      _version
-      _deleted
-      _lastChangedAt
+      tasks {
+        nextToken
+      }
       createdAt
       updatedAt
     }
-    _version
-    _deleted
-    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -32,15 +29,12 @@ subscription OnUpdateTaskMaster {
     team {
       id
       name
-      _version
-      _deleted
-      _lastChangedAt
+      tasks {
+        nextToken
+      }
       createdAt
       updatedAt
     }
-    _version
-    _deleted
-    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -55,15 +49,12 @@ subscription OnDeleteTaskMaster {
     team {
       id
       name
-      _version
-      _deleted
-      _lastChangedAt
+      tasks {
+        nextToken
+      }
       createdAt
       updatedAt
     }
-    _version
-    _deleted
-    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -73,12 +64,17 @@ subscription OnCreateTeam {
     id
     name
     tasks {
+      items {
+        id
+        title
+        body
+        status
+        teamID
+        createdAt
+        updatedAt
+      }
       nextToken
-      startedAt
     }
-    _version
-    _deleted
-    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -88,12 +84,17 @@ subscription OnUpdateTeam {
     id
     name
     tasks {
+      items {
+        id
+        title
+        body
+        status
+        teamID
+        createdAt
+        updatedAt
+      }
       nextToken
-      startedAt
     }
-    _version
-    _deleted
-    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -103,12 +104,17 @@ subscription OnDeleteTeam {
     id
     name
     tasks {
+      items {
+        id
+        title
+        body
+        status
+        teamID
+        createdAt
+        updatedAt
+      }
       nextToken
-      startedAt
     }
-    _version
-    _deleted
-    _lastChangedAt
     createdAt
     updatedAt
   }

@@ -3,6 +3,10 @@ package com.example.asac_test;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +20,10 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.TaskMaster;
+import com.amplifyframework.datastore.generated.model.Team;
 import com.example.asac_test.DataBase.AppDatabase;
 import com.example.asac_test.Entity.TaskEntity;
 
@@ -34,47 +42,52 @@ public class AllTasks extends AppCompatActivity {
 //        taskData.add(new Task("read","Finish the reading 28","In Progress"));
 //        taskData.add(new Task("fun","Watch movie","assigned"));
 //        taskData.add(new Task("coding","Finished code-challenge","Completed"));
-        List<TaskEntity> taskData = AppDatabase.getInstance(getApplicationContext()).taskDAO().getAll();
 
-        RecyclerView allStudentRecyclerView = findViewById(R.id.recTask);
 
-        allStudentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        allStudentRecyclerView.setAdapter(new TaskAdapter((ArrayList<TaskEntity>) taskData));
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
-    protected void onResume() {
+    protected void onStart() {
 
-        super.onResume();
+        super.onStart();
+        List<TaskEntity> taskData = AppDatabase.getInstance(getApplicationContext()).taskDAO().getAll();
+        List<TaskMaster> taskList = new ArrayList<TaskMaster>();
+        List<Team> teamList = new ArrayList<Team>();
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String title = prefs.getString("title","title");
-        String desc = prefs.getString("description","description");
-        String counter = prefs.getString("counter","total:0");
-        int number=prefs.getInt("number",0);
-//        for (int i=0;i<2;i++){
-//            ConstraintLayout ll = (ConstraintLayout)findViewById(R.id.all);
-//
-//            Button btn = new Button(this);
-//
-//            btn.setText("Task "+i);
-//            btn.setId(i);
-//            btn.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
-//            ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) btn.getLayoutParams();
-//            layoutParams.addRule(RelativeLayout.BELOW, button.getId());
-//            layoutParams.addRule(RelativeLayout.ALIGN_LEFT, button.getId());
-//            textView.setLayoutParams(layoutParams);
-//
-//            ll.addView(btn);
-//
-//        }
-        TextView textView=(TextView)findViewById(R.id.text1);
-        TextView counterText=(TextView)findViewById(R.id.counter);
-        textView.setText(title +"\n"+desc);
-        counterText.setText(counter);
+        RecyclerView allStudentRecyclerView = findViewById(R.id.recTask);
+        Handler handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message message) {
+                allStudentRecyclerView.getAdapter().notifyDataSetChanged();
+                return false;
+            }
+        });
+
+        Amplify.API.query(
+                ModelQuery.list(com.amplifyframework.datastore.generated.model.Team.class),
+                response -> {
+                    for (Team tema : response.getData()) {
+//                        Log.i("MyAmplifyApp", tema.getName());
+//                        Log.i("MyAmplifyApp", tema.getId());
+                        teamList.add(tema);
+                    }
+                    for (int i = 0; i < teamList.size(); i++) {
+                        taskList.addAll(teamList.get(i).getTasks());
+
+                    }
+                    handler.sendEmptyMessage(1);
+                },
+                error -> Log.e("MyAmplifyApp", "Query failure", error)
+        );
+
+        allStudentRecyclerView.setAdapter(new TaskAdapter(taskList,this));
+        allStudentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        String team1 = sharedPreferences.getString("team", "team");
+//        TextView teamName = findViewById(R.id);
+//        teamName.setText(team1);
+
 
 
     }

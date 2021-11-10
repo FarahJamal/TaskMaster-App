@@ -1,10 +1,10 @@
 {
+  "projectName": "TaskMaster-App",
+  "version": "3.1",
+  "frontend": "android",
   "providers": [
     "awscloudformation"
   ],
-  "projectName": "TaskMaster",
-  "version": "3.1",
-  "frontend": "android",
   "android": {
     "config": {
       "ResDir": "app/src/main/res"
