@@ -1,0 +1,21 @@
+enum Status {
+  NEW
+  COMPLETED
+  IN_PROGRESS
+  NEWVALUE
+}
+
+type TaskMaster @model @key(name: "byTeam", fields: ["teamID", "title"]) @auth(rules: [{allow: public}]) {
+  id: ID!
+  title: String!
+  body: String
+  status: Status!
+  teamID: ID!
+}
+
+type Team @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  tasks: [TaskMaster] @connection(keyName: "byTeam", fields: ["id"])
+}
+ 

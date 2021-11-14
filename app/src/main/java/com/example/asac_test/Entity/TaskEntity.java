@@ -15,11 +15,13 @@ public class TaskEntity {
 
     @ColumnInfo(name = "status")
     public String status;
-
-    public TaskEntity(String title, String body, String status) {
+    @ColumnInfo(name = "team")
+    public String team;
+    public TaskEntity(String title, String body, String status,String team) {
         this.title = title;
         this.body = body;
         this.status = status;
+this.team=team;
     }
 }
 

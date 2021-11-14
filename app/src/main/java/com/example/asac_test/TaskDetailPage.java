@@ -20,15 +20,17 @@ public class TaskDetailPage extends AppCompatActivity {
         TextView title=(TextView)findViewById(R.id.title);
         TextView bodies=(TextView)findViewById(R.id.text);
         TextView st=(TextView)findViewById(R.id.status);
-
+TextView teamName=(TextView)findViewById(R.id.teamName);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
 
             String t = extras.getString("title");
                 String body=extras.getString("body");
                 String status=extras.getString("status");
+            String team=extras.getString("team");
 
- if(bodies!=null){
+
+            if(bodies!=null){
 
     if(status.equalsIgnoreCase("completed"))
     st.setTextColor(Color.GREEN);
@@ -41,6 +43,7 @@ else
     bodies.setText(body);
     st.setText(status);
      title.setText(t);
+     teamName.setText(team);
  }
 
 

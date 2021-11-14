@@ -17,26 +17,40 @@ import android.widget.Toast;
 
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 
 import com.amplifyframework.datastore.generated.model.Status;
 import com.amplifyframework.datastore.generated.model.TaskMaster;
+import com.amplifyframework.datastore.generated.model.Team;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class MyTasks extends AppCompatActivity {
     private static final String TAG ="MyTasks" ;
     ChipNavigationBar chipNavigationBar;
-
+TextView user;
+TextView mail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_tasks);
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPref", 0);
+        String username = sharedPreferences.getString("username",null);
+        String email = sharedPreferences.getString("email",null);
+        user=(TextView)findViewById(R.id.username);
+        mail=(TextView)findViewById(R.id.email);
+        user.setText(username);
+        mail.setText(email);
 
         /**AWS stuff**/
 
         configureAmplify();
+        createTeams();
 
         /**end here**/
 
@@ -75,38 +89,39 @@ public class MyTasks extends AppCompatActivity {
                 }
             }
         });
-        //     Amplify.DataStore.save(item,
-//    success -> Log.i("Tutorial", "Saved item: " + success.item().getTitle()),
-//    error -> Log.e("Tutorial", "Could not save item to DataStore", error)
-//            );
 
-//        Amplify.DataStore.query(TaskMaster.class,
-//                tasks -> {
-//                    while (tasks.hasNext()) {
-//                        TaskMaster task = tasks.next();
-//
-//                        Log.i("Tutorial", "==== Todo ====");
-//                        Log.i("Tutorial", "Name: " + task.getTitle());
-//
-//                        if (task.getStatus() != null) {
-//                            Log.i("Tutorial", "Priority: " + task.getStatus().toString());
-//                        }
-//
-//                        if (task.getBody() != null) {
-//                            Log.i("Tutorial", "CompletedAt: " + task.getBody().toString());
-//                        }
-//                    }
-//                },
-//                failure -> Log.e("Tutorial", "Could not query DataStore", failure)
-//        );
-           }
-//    TaskMaster item = TaskMaster.builder()
-//            .title("Build Android application")
-//            .status(Status.IN_PROGRESS)
-//            .body("complete building this App with Amplify and AWS ... ")
-//            .build();
+    }
 
+    private void createTeams(){
 
+        Team todo1 = Team.builder()
+                .name("Team 1").id("1")
+                .build();
+
+        Amplify.API.mutate(
+                ModelMutation.create(todo1),
+                response -> Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData()),
+                error -> Log.e("MyAmplifyApp", "Create failed", error)
+        );
+        Team todo2 = Team.builder()
+                .name("Team 2").id("2")
+                .build();
+
+        Amplify.API.mutate(
+                ModelMutation.create(todo2),
+                response -> Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData()),
+                error -> Log.e("MyAmplifyApp", "Create failed", error)
+        );
+        Team todo3 = Team.builder()
+                .name("Team 3").id("3")
+                .build();
+
+        Amplify.API.mutate(
+                ModelMutation.create(todo3),
+                response -> Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData()),
+                error -> Log.e("MyAmplifyApp", "Create failed", error)
+        );
+    }
     public void add(View view) {
         Intent intent=new Intent(MyTasks.this, AddTask.class);
         startActivity(intent);
@@ -116,19 +131,7 @@ public class MyTasks extends AppCompatActivity {
         Intent intent=new Intent(MyTasks.this,AllTasks.class);
         startActivity(intent);
     }
-    @Override
-    protected void onResume() {
 
-        super.onResume();
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String user = prefs.getString("username","guest");
-        String mail = prefs.getString("email",null);
-        TextView username=(TextView)findViewById(R.id.username);
-        TextView email=(TextView)findViewById(R.id.email);
-        username.setText("Hello, "+user);
-        email.setText(mail);
-    }
 
     public void setting(View view) {
         Intent i=new Intent(MyTasks.this,SettingsPage.class);

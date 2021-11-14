@@ -67,3 +67,18 @@ We’ll continue to work with Amplify to add more cloud functionality for the re
 ![](/screenshots/l32-5.png)
 ##### DynamoDB Page AWS
 ![](/screenshots/l32-2.png)
+## lab 33
+![](/screenshots/add33.png)
+![](/screenshots/all33-2.png)
+![](/screenshots/all33.png)
+![](/screenshots/details33.png)
+![](/screenshots/MyTask33.png)
+
+##### DynamoDB Page AWS
+![](/screenshots/tasksDB.png)
+![](/screenshots/teamsDB.png)
+
+## lab 34
+**generate APP APK and deploy to App store**
+[Android APK file](/app/build/outputs/apk/debug/TaskMaster.apk)
+

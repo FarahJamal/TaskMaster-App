@@ -22,17 +22,15 @@ import java.util.List;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
 
     List<TaskEntity> allTasksData = new ArrayList<>();
-    List<TaskMaster> allTask = new ArrayList<>();
-Context context;
-    public  TaskAdapter (ArrayList<TaskEntity> allTasksData) {
+    List<TaskMaster> allTasksData2 = new ArrayList<>();
+Context c;
+    public  TaskAdapter (Context c,ArrayList<TaskEntity> allTasksData) {
         this.allTasksData = allTasksData;
+        this.c=c;
     }
-    public TaskAdapter(List<TaskMaster> allTask, Context context) {
-        this.allTask = allTask;
-        this.context=context;
+    public  TaskAdapter (List<TaskMaster> allTasksData2, Context context) {
+        this.allTasksData2 = allTasksData2;
     }
-
-
     public class TaskHolder extends RecyclerView.ViewHolder {
 
         public TaskEntity task;
@@ -49,6 +47,8 @@ Context context;
                     goToDetailsPage.putExtra("body",allTasksData.get(getAdapterPosition()).body);
                     goToDetailsPage.putExtra("status",allTasksData.get(getAdapterPosition()).status);
                     goToDetailsPage.putExtra("title",allTasksData.get(getAdapterPosition()).title);
+                    goToDetailsPage.putExtra("team",allTasksData.get(getAdapterPosition()).team);
+
                     view.getContext().startActivity(goToDetailsPage);
                 }
                 });
@@ -75,13 +75,23 @@ Context context;
         TextView body = holder.itemView.findViewById(R.id.body);
         TextView status = holder.itemView.findViewById(R.id.status);
 
+        TextView team = holder.itemView.findViewById(R.id.team);
+
         body.setText(holder.task.body);
         status.setText(holder.task.status);
+ team.setText(holder.task.team);
+
     }
 
     @Override
     public int getItemCount() {
         return allTasksData.size();    }
 
+    public List<TaskEntity> getTaskList() {
+        return allTasksData;
+    }
 
+    public void setTaskOGList(List<TaskEntity> allTasksData) {
+        this.allTasksData = allTasksData;
+    }
 }
