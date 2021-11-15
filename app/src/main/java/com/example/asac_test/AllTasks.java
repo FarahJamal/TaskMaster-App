@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,17 @@ public class AllTasks extends AppCompatActivity {
         setContentView(R.layout.activity_all_tasks);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        SharedPreferences sharedPreference = getSharedPreferences("pref", 0);
+        String name = sharedPreference.getString("file","");
+        System.out.println("file ==> "+name);
+        if(name.split(".")[1].equals("png")){
+            ImageView imageView=(ImageView)findViewById(R.id.img);
+            imageView.setVisibility(View.VISIBLE);
+        }
+//        else{
+//            TextView textView=(TextView) findViewById(R.id.file);
+//            textView.setVisibility(View.VISIBLE);
+//        }
     }
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -81,6 +93,8 @@ public class AllTasks extends AppCompatActivity {
     }
 
     private void getTasks() {
+
+
         List<TaskMaster> listOfTasks = new ArrayList<>();
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPref", 0);
@@ -104,7 +118,8 @@ public class AllTasks extends AppCompatActivity {
 
                         for (TaskMaster task : listOfTasks
                         ) {
-                            allTasks.add(new TaskEntity(task.getTitle(), task.getBody(), task.getStatus().name(),task.getTeamId()));
+                            allTasks.add(new TaskEntity(task.getTitle(), task.getBody(), task.getStatus().name(),task.getTeamId(),task.getS3ImageKey()));
+
                         }
 
                         handler.sendEmptyMessage(1);
@@ -128,7 +143,7 @@ public class AllTasks extends AppCompatActivity {
 
                         for (TaskMaster task : listOfTasks
                         ) {
-                            allTasks.add(new TaskEntity(task.getTitle(), task.getBody(), task.getStatus().name(),task.getTeamId()));
+                            allTasks.add(new TaskEntity(task.getTitle(), task.getBody(), task.getStatus().name(),task.getTeamId(),task.getS3ImageKey()));
                         }
 
                         handler.sendEmptyMessage(1);

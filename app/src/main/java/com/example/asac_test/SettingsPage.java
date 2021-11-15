@@ -8,6 +8,7 @@ import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -23,6 +24,7 @@ import android.widget.Toolbar;
 
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Team;
+import com.example.asac_test.ui.auth.SignUp;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 import java.util.ArrayList;
@@ -152,4 +154,17 @@ String team="";
 
     }
 
+    public void logout(View view) {
+        Amplify.Auth.signOut(
+                () -> {Log.i("AuthQuickstart", "Signed out successfully");
+                    Intent i = new Intent(SettingsPage.this, SignUp.class);
+                startActivity(i);
+                },
+                error -> {
+                    Log.e("AuthQuickstart", error.toString());
+                    Toast toast=Toast.makeText(getApplicationContext(),"error happened when trying to logout",Toast.LENGTH_LONG);
+                    toast.show();
+                }
+        );
+    }
 }

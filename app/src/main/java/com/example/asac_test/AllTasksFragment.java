@@ -20,6 +20,8 @@ public class AllTasksFragment extends Fragment {
     private static final String ARG_PARAM2 = "status";
     private static final String ARG_PARAM3 = "title";
     private static final String ARG_PARAM4 = "team";
+    private static final String ARG_PARAM5 = "file";
+
 
 
 
@@ -28,6 +30,7 @@ public class AllTasksFragment extends Fragment {
     private String status;
     private String title;
     private String team;
+    private String file;
 
     public AllTasksFragment() {
         // Required empty public constructor
@@ -41,16 +44,19 @@ public class AllTasksFragment extends Fragment {
      * @param status Parameter 2.
      * @param title parameter 3.
      * @param team parameter 4.
+     * @param file parameter 5.
      * @return A new instance of fragment AllTasksFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AllTasksFragment newInstance(String title,String body, String status,String team) {
+    public static AllTasksFragment newInstance(String title,String body, String status,String team,String file) {
         AllTasksFragment fragment = new AllTasksFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, body);
         args.putString(ARG_PARAM2, status);
         args.putString(ARG_PARAM3, title);
         args.putString(ARG_PARAM4, team);
+        args.putString(ARG_PARAM5, file);
+
 
         fragment.setArguments(args);
         return fragment;
@@ -63,6 +69,7 @@ public class AllTasksFragment extends Fragment {
             status = getArguments().getString(ARG_PARAM2);
             title = getArguments().getString(ARG_PARAM3);
             team = getArguments().getString(ARG_PARAM4);
+            file = getArguments().getString(ARG_PARAM5);
 
         }
     }

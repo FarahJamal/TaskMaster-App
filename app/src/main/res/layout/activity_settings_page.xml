@@ -86,14 +86,27 @@
         android:id="@+id/button"
         android:layout_width="122dp"
         android:layout_height="53dp"
-        android:layout_marginBottom="92dp"
+        android:layout_marginBottom="104dp"
         android:backgroundTint="@color/purple_200"
         android:onClick="click"
         android:text="save"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#BA013D"
+        android:text="Logout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.918"
+        android:onClick="logout"/>
 
     <com.ismaeldivita.chipnavigation.ChipNavigationBar
         android:id="@+id/chip"

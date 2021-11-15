@@ -1,25 +1,35 @@
 package com.example.asac_test;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +42,11 @@ import com.amplifyframework.datastore.generated.model.Team;
 import com.example.asac_test.DataBase.AppDatabase;
 import com.example.asac_test.Entity.TaskEntity;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,6 +62,8 @@ public class AddTask extends AppCompatActivity implements AdapterView.OnItemSele
     RadioButton selectedRadioButton;
     Spinner  spinner ;
     ArrayList <String>allTeams=new ArrayList<>();
+    String name="";
+
     //    SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "com.example.asac_test" ;
     @Override
@@ -59,8 +76,25 @@ public class AddTask extends AppCompatActivity implements AdapterView.OnItemSele
         actionBar.setDisplayHomeAsUpEnabled(true);
         radioGroup = (RadioGroup) findViewById(R.id.radio);
 
-
-
+        // initiate a Switch
+        Switch simpleSwitch = (Switch) findViewById(R.id.simpleSwitch);
+simpleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if(b){
+            Button btn=findViewById(R.id.up_f);
+            btn.setVisibility(View.INVISIBLE);
+            ImageView img=findViewById(R.id.IdProf);
+            img.setVisibility(View.VISIBLE);
+        }
+        else{
+            Button btn=findViewById(R.id.up_f);
+            btn.setVisibility(View.VISIBLE);
+            ImageView img=findViewById(R.id.IdProf);
+            img.setVisibility(View.INVISIBLE);
+        }
+    }
+});
 
 
     getTeams();
@@ -99,6 +133,8 @@ public class AddTask extends AppCompatActivity implements AdapterView.OnItemSele
                             String tutorialsName = parent.getItemAtPosition(position).toString();
                             Toast.makeText(parent.getContext(), "Selected: " + tutorialsName,Toast.LENGTH_LONG).show();
                             team=tutorialsName;
+                            ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+                            ((TextView) parent.getChildAt(0)).setTextSize(20);
                         }
                         @Override
                         public void onNothingSelected(AdapterView <?> parent) {
@@ -124,7 +160,6 @@ public class AddTask extends AppCompatActivity implements AdapterView.OnItemSele
         String text2=editText2.getText().toString();
 
 
-        TextView count=(TextView)findViewById(R.id.counter);
 //Log.v("spinner",spinner.)
         if(text.isEmpty() && text2.isEmpty()){
             Toast message= Toast.makeText(getBaseContext(),"you should fill both fields first!",Toast.LENGTH_LONG);
@@ -135,7 +170,6 @@ public class AddTask extends AppCompatActivity implements AdapterView.OnItemSele
             Intent i=new Intent(AddTask.this,AllTasks.class);
 
             Toast message= Toast.makeText(getBaseContext(),"you have successfully add your task!",Toast.LENGTH_LONG);
-            count.setText("total:"+counter);
             startActivity(i);
             message.show();
 
@@ -171,18 +205,19 @@ public class AddTask extends AppCompatActivity implements AdapterView.OnItemSele
                 error -> Log.e("MyAmplifyApp", "Query failure", error)
         );
 Log.v("voted ==>",vote.toString());
-        dataStore(editText.getText().toString(),editText2.getText().toString(),vote,team);
+        dataStore(editText.getText().toString(),editText2.getText().toString(),vote,team,name);
 
 
         Intent intent = new Intent(AddTask.this, AllTasks.class);
         startActivity(intent);
     }
-    private void dataStore(String title,String body,Status status,String id){
+    private void dataStore(String title,String body,Status status,String id,String fileName){
         TaskMaster task = TaskMaster.builder()
                 .title(title)
                 .status(status)
                 .teamId(id)
                 .body(body)
+                .s3ImageKey(fileName)
                 .build();
 
 
@@ -202,4 +237,67 @@ Log.v("voted ==>",vote.toString());
     }
     @Override
     public void onNothingSelected(AdapterView<?> parent) { }
+
+    public void upload(View view) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");
+            startActivityForResult(intent, 9);
+
+    }
+
+    public void upload_file(View view) {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        startActivityForResult(intent, 12);
+    }
+File fileToUpload;
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        fileToUpload = new File(getApplicationContext().getFilesDir(), "uploaded_image");
+        if(requestCode == 9){
+
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                FileUtils.copy(inputStream, new FileOutputStream(fileToUpload));
+
+                ImageView i = findViewById(R.id.IdProf);
+                i.setImageBitmap(BitmapFactory.decodeFile(fileToUpload.getPath()));
+name=fileToUpload+".png";
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        if(requestCode == 12){
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                FileUtils.copy(inputStream, new FileOutputStream(fileToUpload));
+                name=fileToUpload+".txt";
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        Log.v(TAG,"file uploaded ===> "+fileToUpload);
+
+        Amplify.Storage.uploadFile(
+                name,
+                fileToUpload,
+                result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getKey()),
+                storageFailure -> Log.e("MyAmplifyApp", "Upload failed", storageFailure)
+        );
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("pref", 0); // 0 - for private mode
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("file", name); // Storing string
+        editor.commit();
+
+    }
+
+
 }

@@ -2,12 +2,14 @@ package com.example.asac_test;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,6 +50,7 @@ Context c;
                     goToDetailsPage.putExtra("status",allTasksData.get(getAdapterPosition()).status);
                     goToDetailsPage.putExtra("title",allTasksData.get(getAdapterPosition()).title);
                     goToDetailsPage.putExtra("team",allTasksData.get(getAdapterPosition()).team);
+                    goToDetailsPage.putExtra("file",allTasksData.get(getAdapterPosition()).file);
 
                     view.getContext().startActivity(goToDetailsPage);
                 }
@@ -76,10 +79,15 @@ Context c;
         TextView status = holder.itemView.findViewById(R.id.status);
 
         TextView team = holder.itemView.findViewById(R.id.team);
+        ImageView file = holder.itemView.findViewById(R.id.img);
+        TextView file_file = holder.itemView.findViewById(R.id.file);
+
 
         body.setText(holder.task.body);
         status.setText(holder.task.status);
  team.setText(holder.task.team);
+        file.setImageBitmap(BitmapFactory.decodeFile(holder.task.file));
+        file_file.setText(holder.task.file);
 
     }
 

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ public class TaskDetailPage extends AppCompatActivity {
         TextView bodies=(TextView)findViewById(R.id.text);
         TextView st=(TextView)findViewById(R.id.status);
 TextView teamName=(TextView)findViewById(R.id.teamName);
+        ImageView imageView=(ImageView)findViewById(R.id.image2);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
 
@@ -28,6 +30,7 @@ TextView teamName=(TextView)findViewById(R.id.teamName);
                 String body=extras.getString("body");
                 String status=extras.getString("status");
             String team=extras.getString("team");
+
 
 
             if(bodies!=null){
@@ -44,6 +47,7 @@ else
     st.setText(status);
      title.setText(t);
      teamName.setText(team);
+//     imageView.setImageBitmap();
  }
 
 

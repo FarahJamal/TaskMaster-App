@@ -61,6 +61,7 @@
 ## lab 32
 **Today, TaskMaster app  gain a scalable backend by using AWS Amplify. 
 We’ll continue to work with Amplify to add more cloud functionality for the rest of the Project.**
+
 ![](/screenshots/l32.png)
 ![](/screenshots/l32-3.png)
 ![](/screenshots/l32-4.png)

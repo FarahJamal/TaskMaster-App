@@ -30,11 +30,13 @@ public final class TaskMaster implements Model {
   public static final QueryField TITLE = field("TaskMaster", "title");
   public static final QueryField BODY = field("TaskMaster", "body");
   public static final QueryField STATUS = field("TaskMaster", "status");
+  public static final QueryField S3_IMAGE_KEY = field("TaskMaster", "s3ImageKey");
   public static final QueryField TEAM_ID = field("TaskMaster", "teamID");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String", isRequired = true) String title;
   private final @ModelField(targetType="String") String body;
   private final @ModelField(targetType="Status", isRequired = true) Status status;
+  private final @ModelField(targetType="String") String s3ImageKey;
   private final @ModelField(targetType="ID", isRequired = true) String teamID;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime createdAt;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime updatedAt;
@@ -54,6 +56,10 @@ public final class TaskMaster implements Model {
       return status;
   }
   
+  public String getS3ImageKey() {
+      return s3ImageKey;
+  }
+  
   public String getTeamId() {
       return teamID;
   }
@@ -66,11 +72,12 @@ public final class TaskMaster implements Model {
       return updatedAt;
   }
   
-  private TaskMaster(String id, String title, String body, Status status, String teamID) {
+  private TaskMaster(String id, String title, String body, Status status, String s3ImageKey, String teamID) {
     this.id = id;
     this.title = title;
     this.body = body;
     this.status = status;
+    this.s3ImageKey = s3ImageKey;
     this.teamID = teamID;
   }
   
@@ -86,6 +93,7 @@ public final class TaskMaster implements Model {
               ObjectsCompat.equals(getTitle(), taskMaster.getTitle()) &&
               ObjectsCompat.equals(getBody(), taskMaster.getBody()) &&
               ObjectsCompat.equals(getStatus(), taskMaster.getStatus()) &&
+              ObjectsCompat.equals(getS3ImageKey(), taskMaster.getS3ImageKey()) &&
               ObjectsCompat.equals(getTeamId(), taskMaster.getTeamId()) &&
               ObjectsCompat.equals(getCreatedAt(), taskMaster.getCreatedAt()) &&
               ObjectsCompat.equals(getUpdatedAt(), taskMaster.getUpdatedAt());
@@ -99,6 +107,7 @@ public final class TaskMaster implements Model {
       .append(getTitle())
       .append(getBody())
       .append(getStatus())
+      .append(getS3ImageKey())
       .append(getTeamId())
       .append(getCreatedAt())
       .append(getUpdatedAt())
@@ -114,6 +123,7 @@ public final class TaskMaster implements Model {
       .append("title=" + String.valueOf(getTitle()) + ", ")
       .append("body=" + String.valueOf(getBody()) + ", ")
       .append("status=" + String.valueOf(getStatus()) + ", ")
+      .append("s3ImageKey=" + String.valueOf(getS3ImageKey()) + ", ")
       .append("teamID=" + String.valueOf(getTeamId()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("updatedAt=" + String.valueOf(getUpdatedAt()))
@@ -139,6 +149,7 @@ public final class TaskMaster implements Model {
       null,
       null,
       null,
+      null,
       null
     );
   }
@@ -148,6 +159,7 @@ public final class TaskMaster implements Model {
       title,
       body,
       status,
+      s3ImageKey,
       teamID);
   }
   public interface TitleStep {
@@ -169,6 +181,7 @@ public final class TaskMaster implements Model {
     TaskMaster build();
     BuildStep id(String id);
     BuildStep body(String body);
+    BuildStep s3ImageKey(String s3ImageKey);
   }
   
 
@@ -178,6 +191,7 @@ public final class TaskMaster implements Model {
     private Status status;
     private String teamID;
     private String body;
+    private String s3ImageKey;
     @Override
      public TaskMaster build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
@@ -187,6 +201,7 @@ public final class TaskMaster implements Model {
           title,
           body,
           status,
+          s3ImageKey,
           teamID);
     }
     
@@ -217,6 +232,12 @@ public final class TaskMaster implements Model {
         return this;
     }
     
+    @Override
+     public BuildStep s3ImageKey(String s3ImageKey) {
+        this.s3ImageKey = s3ImageKey;
+        return this;
+    }
+    
     /** 
      * @param id id
      * @return Current Builder instance, for fluent method chaining
@@ -229,12 +250,13 @@ public final class TaskMaster implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String title, String body, Status status, String teamId) {
+    private CopyOfBuilder(String id, String title, String body, Status status, String s3ImageKey, String teamId) {
       super.id(id);
       super.title(title)
         .status(status)
         .teamId(teamId)
-        .body(body);
+        .body(body)
+        .s3ImageKey(s3ImageKey);
     }
     
     @Override
@@ -255,6 +277,11 @@ public final class TaskMaster implements Model {
     @Override
      public CopyOfBuilder body(String body) {
       return (CopyOfBuilder) super.body(body);
+    }
+    
+    @Override
+     public CopyOfBuilder s3ImageKey(String s3ImageKey) {
+      return (CopyOfBuilder) super.s3ImageKey(s3ImageKey);
     }
   }
   

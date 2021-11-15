@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ASACTest">
-        <activity android:name=".SettingsPage"></activity>
+        <activity android:name=".ui.auth.Verfication"></activity>
+        <activity android:name=".ui.auth.SignUp" />
+        <activity android:name=".ui.auth.SignIn" />
+        <activity android:name=".SettingsPage" />
         <activity android:name=".TaskDetailPage" />
         <activity android:name=".MyTasks" />
         <activity android:name=".AddTask" />
@@ -21,6 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+    </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 </manifest>

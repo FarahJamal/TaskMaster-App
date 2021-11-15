@@ -19,6 +19,7 @@ import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 
@@ -48,8 +49,6 @@ TextView mail;
         mail.setText(email);
 
         /**AWS stuff**/
-
-        configureAmplify();
         createTeams();
 
         /**end here**/
@@ -139,21 +138,10 @@ TextView mail;
 
     }
     /***AWS**/
-    private void configureAmplify() {
-        try {
-            Amplify.addPlugin(new AWSApiPlugin());
-            Amplify.addPlugin(new AWSDataStorePlugin());
-            Amplify.configure(getApplicationContext());
-            Log.i("Tutorial", "Initialized Amplify");
-        } catch (AmplifyException failure) {
-            Log.e("Tutorial", "Could not initialize Amplify", failure);
-        }
-        Amplify.DataStore.observe(TaskMaster.class,
-                started -> Log.i("Tutorial", "Observation began."),
-                change -> Log.i("Tutorial", change.item().toString()),
-                failure -> Log.e("Tutorial", "Observation failed.", failure),
-                () -> Log.i("Tutorial", "Observation complete.")
-        );
+
+
+    public void go(View view) {
+
     }
 
     /********/
