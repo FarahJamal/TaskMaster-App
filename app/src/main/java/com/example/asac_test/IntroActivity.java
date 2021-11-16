@@ -14,6 +14,7 @@ import com.amplifyframework.datastore.generated.model.TaskMaster;
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
 import com.chyrta.onboarder.OnboarderActivity;
 import com.chyrta.onboarder.OnboarderPage;
+import com.example.asac_test.ui.auth.SignIn;
 import com.example.asac_test.ui.auth.SignUp;
 
 import java.util.ArrayList;
@@ -61,14 +62,14 @@ configureAmplify();
     public void onSkipButtonPressed() {
         // Optional: by default it skips onboarder to the end
         super.onSkipButtonPressed();
-        Intent i =new Intent(IntroActivity.this, MyTasks.class);
+        Intent i =new Intent(IntroActivity.this, SignIn.class);
         startActivity(i);
         // Define your actions when the user press 'Skip' button
     }
 
     @Override
     public void onFinishButtonPressed() {
-        Intent i =new Intent(IntroActivity.this, MyTasks.class);
+        Intent i =new Intent(IntroActivity.this, SignIn.class);
         startActivity(i);    }
     private void configureAmplify() {
         try {

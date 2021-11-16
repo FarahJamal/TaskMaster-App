@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +41,8 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Status;
 import com.amplifyframework.datastore.generated.model.TaskMaster;
 import com.amplifyframework.datastore.generated.model.Team;
+import com.amplifyframework.storage.StorageAccessLevel;
+import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.example.asac_test.DataBase.AppDatabase;
 import com.example.asac_test.Entity.TaskEntity;
 
@@ -239,64 +243,95 @@ Log.v("voted ==>",vote.toString());
     public void onNothingSelected(AdapterView<?> parent) { }
 
     public void upload(View view) {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            startActivityForResult(intent, 9);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+
+        startActivityForResult(intent, 9);
 
     }
 
     public void upload_file(View view) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
+
         startActivityForResult(intent, 12);
     }
 File fileToUpload;
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
 
-        fileToUpload = new File(getApplicationContext().getFilesDir(), "uploaded_image");
-        if(requestCode == 9){
+        System.out.println("this is data ==> " + data.getDataString());
+        Uri uri ;
+        String path = new File(data.getData().getPath()).getAbsolutePath();
 
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(data.getData());
-                FileUtils.copy(inputStream, new FileOutputStream(fileToUpload));
+        if (path != null) {
+            uri = data.getData();
 
-                ImageView i = findViewById(R.id.IdProf);
-                i.setImageBitmap(BitmapFactory.decodeFile(fileToUpload.getPath()));
-name=fileToUpload+".png";
+            String filename;
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
 
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (cursor == null) filename = uri.getPath();
+            else {
+                cursor.moveToFirst();
+                int idx = cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME);
+                filename = cursor.getString(idx);
+                cursor.close();
             }
 
-        }
-        if(requestCode == 12){
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(data.getData());
-                FileUtils.copy(inputStream, new FileOutputStream(fileToUpload));
-                name=fileToUpload+".txt";
+            String ImgName = filename.substring(0, filename.lastIndexOf("."));
+            String extension = filename.substring(filename.lastIndexOf(".") + 1);
+            System.out.println("name ==> " + ImgName);
+            System.out.println("name ==> " + extension);
 
-            } catch (IOException e) {
-                e.printStackTrace();
+            fileToUpload = new File(getApplicationContext().getFilesDir(), ImgName+"."+extension);
+
+            if (requestCode == 9) {
+
+
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                    FileUtils.copy(inputStream, new FileOutputStream(fileToUpload));
+                    name =ImgName+"."+extension;
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
+            if (requestCode == 12) {
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                    FileUtils.copy(inputStream, new FileOutputStream(fileToUpload));
+                    name =ImgName+"."+extension;
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            Log.v(TAG, "file uploaded ===> " + fileToUpload);
+            name =ImgName+"."+extension;
+            StorageUploadFileOptions options = StorageUploadFileOptions.builder()
+                    .accessLevel(StorageAccessLevel.PUBLIC)
+                    .build();
+            Amplify.Storage.uploadFile(
+                    name,
+
+                    fileToUpload,
+                    result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getKey()),
+                    storageFailure -> Log.e("MyAmplifyApp", "Upload failed", storageFailure)
+            );
+
+            SharedPreferences pref = getApplicationContext().getSharedPreferences("pref", 0); // 0 - for private mode
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("file", ImgName+"."+extension); // Storing string
+            editor.commit();
 
         }
-        Log.v(TAG,"file uploaded ===> "+fileToUpload);
-
-        Amplify.Storage.uploadFile(
-                name,
-                fileToUpload,
-                result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getKey()),
-                storageFailure -> Log.e("MyAmplifyApp", "Upload failed", storageFailure)
-        );
-
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("pref", 0); // 0 - for private mode
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("file", name); // Storing string
-        editor.commit();
-
     }
 
 

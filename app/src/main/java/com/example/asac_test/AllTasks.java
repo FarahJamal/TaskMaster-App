@@ -44,13 +44,11 @@ public class AllTasks extends AppCompatActivity {
         setContentView(R.layout.activity_all_tasks);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        SharedPreferences sharedPreference = getSharedPreferences("pref", 0);
-        String name = sharedPreference.getString("file","");
-        System.out.println("file ==> "+name);
-        if(name.split(".")[1].equals("png")){
-            ImageView imageView=(ImageView)findViewById(R.id.img);
-            imageView.setVisibility(View.VISIBLE);
-        }
+
+//        if(name.split(".")[1].equals("png")){
+//            ImageView imageView=(ImageView)findViewById(R.id.img);
+//            imageView.setVisibility(View.VISIBLE);
+//        }
 //        else{
 //            TextView textView=(TextView) findViewById(R.id.file);
 //            textView.setVisibility(View.VISIBLE);

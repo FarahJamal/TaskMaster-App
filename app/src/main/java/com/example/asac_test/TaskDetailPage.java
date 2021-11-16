@@ -5,12 +5,21 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.storage.options.StorageDownloadFileOptions;
+
+import java.io.File;
 
 public class TaskDetailPage extends AppCompatActivity {
 
@@ -22,7 +31,6 @@ public class TaskDetailPage extends AppCompatActivity {
         TextView bodies=(TextView)findViewById(R.id.text);
         TextView st=(TextView)findViewById(R.id.status);
 TextView teamName=(TextView)findViewById(R.id.teamName);
-        ImageView imageView=(ImageView)findViewById(R.id.image2);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
 
@@ -60,7 +68,29 @@ else
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        SharedPreferences sharedPreference = getSharedPreferences("pref", 0);
+        String name = sharedPreference.getString("file","");
+        System.out.println("file ==> "+name);
+        ImageView myimg=findViewById(R.id.imageView2);
+        File fileToDownload;
+        fileToDownload= new File(getApplicationContext().getFilesDir() +name);
+
+                Amplify.Storage.downloadFile(
+
+                name,
+                fileToDownload,
+                StorageDownloadFileOptions.defaultInstance(),
+                progress -> Log.i("MyAmplifyApp", "Fraction completed: " + progress.getFractionCompleted()),
+                result ->
+                {     Bitmap bitmap = BitmapFactory.decodeFile(fileToDownload.getPath());
+                    System.out.println("this is bitmap ==> "+fileToDownload.getPath());
+                    myimg.setImageBitmap(bitmap);
+                    Log.i("MyAmplifyApp", "Successfully downloaded: " + result.getFile().getName());
+                    },
+                error -> Log.e("MyAmplifyApp",  "Download Failure", error)
+        );
     }
+
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
 
