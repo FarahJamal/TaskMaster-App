@@ -75,6 +75,7 @@ Context c;
     @Override
     public void onBindViewHolder(@NonNull TaskHolder holder, int position) {
         holder.task = allTasksData.get(position);
+
         TextView body = holder.itemView.findViewById(R.id.body);
         TextView status = holder.itemView.findViewById(R.id.status);
 

@@ -18,6 +18,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
@@ -196,10 +198,10 @@ simpleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListen
         else
             vote=Status.NEW;
 
-
         Amplify.API.query(
-                ModelQuery.list(Team.class),
+                                ModelQuery.list(Team.class),
                 response -> {
+
                     if(response.getData().getRequestForNextResult()==null){
                         System.out.println(response.getData().getRequestForNextResult());
 
@@ -210,8 +212,35 @@ simpleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListen
         );
 Log.v("voted ==>",vote.toString());
         dataStore(editText.getText().toString(),editText2.getText().toString(),vote,team,name);
+        List<Team> listOfTasks = new ArrayList<>();
+Handler handler;
+        handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+
+                return false;
+            }
+        });
+        Amplify.API.query(
+                ModelQuery.list(Team.class),
+                response -> {
+                    System.out.println("hello there");
+                    System.out.println(Team.ID.contains("1"));
 
 
+                    for (Team team : response.getData()) {
+                        listOfTasks.add(team);
+                    }
+                    Collections.sort(listOfTasks, new Comparator<Team>() {
+                        @Override
+                        public int compare(Team task, Team t1) {
+                            return Long.compare(task.getCreatedAt().toDate().getTime(), t1.getCreatedAt().toDate().getTime());
+                        }
+                    });
+                    handler.sendEmptyMessage(1);
+                },
+                error -> Log.e("MyAmplifyApp", "Query failure", error)
+        );
         Intent intent = new Intent(AddTask.this, AllTasks.class);
         startActivity(intent);
     }
@@ -225,11 +254,13 @@ Log.v("voted ==>",vote.toString());
                 .build();
 
 
+
         Amplify.API.mutate(ModelMutation.create(task), succuess-> {
             Log.i(TAG, "Saved to DYNAMODB");
         }, error -> {
             Log.i(TAG, "error saving to DYNAMODB");
         });
+
 
     }
 

@@ -30,6 +30,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
+    <LinearLayout
+        android:id="@+id/setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.634"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
     <EditText
 
         android:id="@+id/username"
@@ -48,25 +62,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.385" />
 
+
     <EditText
 
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="188dp"
         android:background="@drawable/edit_text_border"
         android:backgroundTint="@color/white"
         android:hint="e-mail"
         android:inputType="text"
         android:padding="12dp"
         app:layout_constraintBaseline_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username"
-        app:layout_constraintVertical_bias="0.797" />
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/planets_spinner"
@@ -100,13 +110,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#BA013D"
+        android:onClick="logout"
         android:text="Logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.918"
-        android:onClick="logout"/>
+        app:layout_constraintVertical_bias="0.918" />
 
     <com.ismaeldivita.chipnavigation.ChipNavigationBar
         android:id="@+id/chip"

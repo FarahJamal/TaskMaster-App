@@ -28,8 +28,10 @@ import static com.amplifyframework.core.model.query.predicate.QueryField.field;
 public final class Team implements Model {
   public static final QueryField ID = field("Team", "id");
   public static final QueryField NAME = field("Team", "name");
+  public static final QueryField USERS = field("Team", "users");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String", isRequired = true) String name;
+  private final @ModelField(targetType="String") List<String> users;
   private final @ModelField(targetType="TaskMaster") @HasMany(associatedWith = "teamID", type = TaskMaster.class) List<TaskMaster> tasks = null;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime createdAt;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime updatedAt;
@@ -39,6 +41,10 @@ public final class Team implements Model {
   
   public String getName() {
       return name;
+  }
+  
+  public List<String> getUsers() {
+      return users;
   }
   
   public List<TaskMaster> getTasks() {
@@ -53,9 +59,10 @@ public final class Team implements Model {
       return updatedAt;
   }
   
-  private Team(String id, String name) {
+  private Team(String id, String name, List<String> users) {
     this.id = id;
     this.name = name;
+    this.users = users;
   }
   
   @Override
@@ -68,6 +75,7 @@ public final class Team implements Model {
       Team team = (Team) obj;
       return ObjectsCompat.equals(getId(), team.getId()) &&
               ObjectsCompat.equals(getName(), team.getName()) &&
+              ObjectsCompat.equals(getUsers(), team.getUsers()) &&
               ObjectsCompat.equals(getCreatedAt(), team.getCreatedAt()) &&
               ObjectsCompat.equals(getUpdatedAt(), team.getUpdatedAt());
       }
@@ -78,6 +86,7 @@ public final class Team implements Model {
     return new StringBuilder()
       .append(getId())
       .append(getName())
+      .append(getUsers())
       .append(getCreatedAt())
       .append(getUpdatedAt())
       .toString()
@@ -90,6 +99,7 @@ public final class Team implements Model {
       .append("Team {")
       .append("id=" + String.valueOf(getId()) + ", ")
       .append("name=" + String.valueOf(getName()) + ", ")
+      .append("users=" + String.valueOf(getUsers()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("updatedAt=" + String.valueOf(getUpdatedAt()))
       .append("}")
@@ -111,13 +121,15 @@ public final class Team implements Model {
   public static Team justId(String id) {
     return new Team(
       id,
+      null,
       null
     );
   }
   
   public CopyOfBuilder copyOfBuilder() {
     return new CopyOfBuilder(id,
-      name);
+      name,
+      users);
   }
   public interface NameStep {
     BuildStep name(String name);
@@ -127,25 +139,34 @@ public final class Team implements Model {
   public interface BuildStep {
     Team build();
     BuildStep id(String id);
+    BuildStep users(List<String> users);
   }
   
 
   public static class Builder implements NameStep, BuildStep {
     private String id;
     private String name;
+    private List<String> users;
     @Override
      public Team build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
         
         return new Team(
           id,
-          name);
+          name,
+          users);
     }
     
     @Override
      public BuildStep name(String name) {
         Objects.requireNonNull(name);
         this.name = name;
+        return this;
+    }
+    
+    @Override
+     public BuildStep users(List<String> users) {
+        this.users = users;
         return this;
     }
     
@@ -161,14 +182,20 @@ public final class Team implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String name) {
+    private CopyOfBuilder(String id, String name, List<String> users) {
       super.id(id);
-      super.name(name);
+      super.name(name)
+        .users(users);
     }
     
     @Override
      public CopyOfBuilder name(String name) {
       return (CopyOfBuilder) super.name(name);
+    }
+    
+    @Override
+     public CopyOfBuilder users(List<String> users) {
+      return (CopyOfBuilder) super.users(users);
     }
   }
   

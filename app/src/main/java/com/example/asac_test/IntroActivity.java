@@ -1,11 +1,16 @@
 package com.example.asac_test;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.analytics.AnalyticsEvent;
+import com.amplifyframework.analytics.pinpoint.AWSPinpointAnalyticsPlugin;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
@@ -14,6 +19,7 @@ import com.amplifyframework.datastore.generated.model.TaskMaster;
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
 import com.chyrta.onboarder.OnboarderActivity;
 import com.chyrta.onboarder.OnboarderPage;
+import com.example.asac_test.services.PushListenerService;
 import com.example.asac_test.ui.auth.SignIn;
 import com.example.asac_test.ui.auth.SignUp;
 
@@ -27,6 +33,7 @@ public class IntroActivity extends OnboarderActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createNotificationChannel();
         onboarderPages = new ArrayList<OnboarderPage>();
 configureAmplify();
         // Create your first page
@@ -55,7 +62,8 @@ configureAmplify();
 
         // And pass your pages to 'setOnboardPagesReady' method
         setOnboardPagesReady(onboarderPages);
-
+//eventRecord2();
+//eventRecord3();
     }
 
     @Override
@@ -78,6 +86,8 @@ configureAmplify();
             Amplify.addPlugin(new AWSDataStorePlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.addPlugin(new AWSS3StoragePlugin());
+            Amplify.addPlugin(new AWSPinpointAnalyticsPlugin(getApplication()));
+
             Amplify.configure(getApplicationContext());
             Log.i("Tutorial", "Initialized Amplify");
         } catch (AmplifyException failure) {
@@ -89,5 +99,43 @@ configureAmplify();
                 failure -> Log.e("Tutorial", "Observation failed.", failure),
                 () -> Log.i("Tutorial", "Observation complete.")
         );
+    }
+
+
+    private void eventRecord2() {
+        String userName = getSharedPreferences("pref", MODE_PRIVATE).getString("userInfo", "no user info");
+        AnalyticsEvent event = AnalyticsEvent.builder()
+                .name("User Launched Add task activity")
+                .addProperty("UserName", userName)
+                .build();
+
+        Amplify.Analytics.recordEvent(event);
+
+    }
+
+    private void eventRecord3() {
+        String userName = getSharedPreferences("pref", MODE_PRIVATE).getString("userInfo", "no user info");
+        AnalyticsEvent event = AnalyticsEvent.builder()
+                .name("User Launched All tasks activity")
+                .addProperty("UserName", userName)
+                .build();
+
+        Amplify.Analytics.recordEvent(event);
+
+    }
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(PushListenerService.CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }

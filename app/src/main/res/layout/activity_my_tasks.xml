@@ -47,10 +47,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.102" />
 
+
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="391dp"
+        android:layout_height="223dp"
         android:layout_marginStart="4dp"
         android:src="@drawable/tasks"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -59,11 +60,12 @@
         app:layout_constraintVertical_bias="0.0" />
 
 
+
     <Button
         android:id="@+id/addTask"
         android:layout_width="160dp"
         android:layout_height="76dp"
-        android:layout_marginBottom="156dp"
+        android:layout_marginBottom="124dp"
         android:backgroundTint="@color/purple_200"
         android:onClick="add"
         android:text="@string/add_task"
@@ -77,13 +79,13 @@
 
         android:layout_width="160dp"
         android:layout_height="76dp"
-        android:layout_marginBottom="156dp"
+        android:layout_marginBottom="124dp"
         android:backgroundTint="@color/purple_200"
         android:onClick="all"
         android:text="@string/all_tasks"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.546"
+        app:layout_constraintHorizontal_bias="0.786"
         app:layout_constraintStart_toEndOf="@+id/addTask" />
 
     <Button
@@ -97,22 +99,22 @@
         android:text="@string/settings"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.832"
+        app:layout_constraintHorizontal_bias="0.478"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/allTasks"
-        app:layout_constraintVertical_bias="0.105" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="go"
+        android:text="go"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.188"
+        app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.882"
-        android:onClick="go"
-        android:text="go"/>
+        app:layout_constraintVertical_bias="0.003" />
 
     <com.ismaeldivita.chipnavigation.ChipNavigationBar
 android:id="@+id/chip"

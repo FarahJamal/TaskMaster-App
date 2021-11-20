@@ -83,3 +83,21 @@ We’ll continue to work with Amplify to add more cloud functionality for the re
 **generate APP APK and deploy to App store**
 [Android APK file](/app/build/outputs/apk/debug/TaskMaster.apk)
 
+
+## lab 37
+**use S3 storage to upload an image to the aws cloud**
+![](/screenshots/s3-1.png)
+![](/screenshots/s3-2.png)
+![](/screenshots/s3-3.png)
+![](/screenshots/s3-4.png)
+![](/screenshots/s3-5.png)
+
+## lab 38
+**add Notifications to the App using SNS**
+![](/screenshots/not-1.png)
+![](/screenshots/not-2.png)
+
+
+## lab 39
+**add analytics to the App and review users on it!**
+![](/screenshots/ana.png)

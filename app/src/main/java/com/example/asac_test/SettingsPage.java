@@ -16,33 +16,47 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Team;
 import com.example.asac_test.ui.auth.SignUp;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class SettingsPage extends AppCompatActivity {
 ChipNavigationBar chipNavigationBar;
     Spinner spinner ;
     ArrayList<String> allTeams=new ArrayList<>();
+    LinearLayout ll ;
 String team="";
-
+    CheckBox checkBox;
+    ArrayList<String>users=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_page);
+        ll= (LinearLayout) findViewById(R.id.setting);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 //        actionBar.setTitle(getTitle());
         chipNavigationBar=findViewById(R.id.chip);
+
+//        users.add("Suaad");
+//        users.add("Zeft");
+
         chipNavigationBar.setOnItemSelectedListener(i -> {
             Log.v("id => ",i+"");
             Log.v("id value => ",R.id.item2+"");
@@ -71,6 +85,9 @@ String team="";
             }
         });
         getTeams();
+        System.out.println("users list ==> "+users);
+
+
     }
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -126,6 +143,37 @@ String team="";
                         Log.i("Tutorial", "Name: " + todo.getName());
                         allTeams.add(todo.getName());
                     }
+                    for(int y=0;y<allTeams.size();y++) {
+                        CheckBox cb = new CheckBox(this);
+                        cb.setText(allTeams.get(y));
+                        cb.setId(y);
+                        ll.addView(cb);
+                        cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+                            String string = buttonView.getText().toString();
+                            Toast toast=Toast.makeText(SettingsPage.this,string,Toast.LENGTH_LONG);
+toast.show();
+
+                            Log.i("checkbox",string);
+                            SharedPreferences sharedPreferences = getSharedPreferences("MyPref", 0);
+                            String username = sharedPreferences.getString("username",null);
+                            users.add(username);
+                            Team team = Team.builder()
+                                    .name(string)
+                                    .id(string.split(" ")[1])
+                                    .users(users)
+
+                                    .build();
+
+                            Amplify.API.mutate(
+                                    ModelMutation.update(team),
+                                    response -> Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData()),
+                                    error -> Log.e("MyAmplifyApp", "Create failed", error)
+                            );
+
+                        });
+                    }
+
                     spinner= (Spinner)findViewById(R.id.planets_spinner);
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_spinner_dropdown_item, allTeams);
                     arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

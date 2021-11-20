@@ -17,6 +17,6 @@ type TaskMaster @model @key(name: "byTeam", fields: ["teamID", "title"]) @auth(r
 type Team @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
+  users:[String]
   tasks: [TaskMaster] @connection(keyName: "byTeam", fields: ["id"])
 }
- 
