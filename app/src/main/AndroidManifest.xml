@@ -34,7 +34,15 @@
         <activity android:name=".SettingsPage" />
         <activity android:name=".TaskDetailPage" />
         <activity android:name=".MyTasks" />
-        <activity android:name=".AddTask" />
+        <activity android:name=".AddTask" >
+            <intent-filter android:label=" share task image">
+                <action android:name="android.intent.action.SEND"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+                <data android:mimeType="text/plain"></data>
+                <data android:mimeType="image/*"></data>
+            </intent-filter>
+        </activity>
+
         <activity android:name=".AllTasks" />
         <activity android:name=".IntroActivity">
             <intent-filter>

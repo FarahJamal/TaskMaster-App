@@ -48,9 +48,11 @@ import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.example.asac_test.DataBase.AppDatabase;
 import com.example.asac_test.Entity.TaskEntity;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -72,10 +74,22 @@ public class AddTask extends AppCompatActivity implements AdapterView.OnItemSele
 
     //    SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "com.example.asac_test" ;
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if(intent!=null){
+            if (type.startsWith("image/")) {
+                handleSendImage(intent); // Handle single image being sent
+            }
+        }
+
+
 
         //To have the back button!!
         ActionBar actionBar = getSupportActionBar();
@@ -105,9 +119,40 @@ simpleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListen
 
     getTeams();
 
+
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    void handleSendImage(Intent intent) {
+        Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        if (imageUri != null) {
+ImageView imageView=findViewById(R.id.IdProf);
+            imageView.setImageURI(null);
+            imageView.setImageURI(imageUri);
+            System.out.println("this is image from deep in my bones straight from inside ===> "+imageUri.getPath());
+name=imageUri.getPath()+ ".png";
 
+File exampleFile = new File(getApplicationContext().getFilesDir(), "image.png");
+
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                FileUtils.copy(inputStream, new FileOutputStream(exampleFile));
+            } catch (Exception exception) {
+                Log.e("MyAmplifyApp", "Upload failed", exception);
+            }
+            Amplify.Storage.uploadFile(
+                    "image.png",
+
+                    exampleFile,
+                    result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getKey()),
+                    storageFailure -> Log.e("MyAmplifyApp", "Upload failed", storageFailure)
+            );
+
+        }
+    }
+    private void uploadFile(Uri uri) {
+
+    }
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
 
@@ -287,6 +332,13 @@ Handler handler;
 
         startActivityForResult(intent, 12);
     }
+    void getImageFromPhone() {
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.setType("*/*"); //single type
+//        i.putExtra(Intent.EXTRA_MIME_TYPES, new String []{".jpg", ".png", ".pdf"}); // multiple file types
+
+        startActivityForResult(i, 9);
+    }
 File fileToUpload;
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -318,7 +370,6 @@ File fileToUpload;
             System.out.println("name ==> " + extension);
 
             fileToUpload = new File(getApplicationContext().getFilesDir(), ImgName+"."+extension);
-
             if (requestCode == 9) {
 
 
@@ -326,6 +377,8 @@ File fileToUpload;
                     InputStream inputStream = getContentResolver().openInputStream(data.getData());
                     FileUtils.copy(inputStream, new FileOutputStream(fileToUpload));
                     name =ImgName+"."+extension;
+                    ImageView button1 = findViewById(R.id.IdProf);
+                    button1.setImageBitmap(BitmapFactory.decodeFile(name));
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -365,5 +418,28 @@ File fileToUpload;
         }
     }
 
+    void checkIntentData() throws IOException {
+        Intent i = getIntent();
+        if (i.getType() == null){}
+        else if (i.getType().startsWith("image/")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                Uri uri = i.getParcelableExtra(Intent.EXTRA_STREAM);
 
+                loadImageFromIntent(uri);
+            }
+        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    void loadImageFromIntent (Uri uri) throws IOException {
+        fileToUpload = new File(getApplicationContext().getFilesDir(), "fileName");
+
+        try{
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            FileUtils.copy(inputStream, new FileOutputStream(fileToUpload));
+            ImageView button1 = findViewById(R.id.IdProf);
+            button1.setImageBitmap(BitmapFactory.decodeFile(name));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }

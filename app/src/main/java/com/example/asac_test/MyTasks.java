@@ -74,7 +74,7 @@ TextView mail;
         user.setText(username);
         mail.setText(email);
         /**AWS stuff**/
-        createTeams();
+//        createTeams();
 
 eventRecord1();
         /**end here**/

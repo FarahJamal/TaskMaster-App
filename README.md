@@ -101,3 +101,9 @@ We’ll continue to work with Amplify to add more cloud functionality for the re
 ## lab 39
 **add analytics to the App and review users on it!**
 ![](/screenshots/ana.png)
+
+## lab 40
+**intent filter trying to add image from outside the Application(from another App)**
+![](/screenshots/intent-filter%20(1).png)
+![](/screenshots/intent-filter%20(2).png)
+![](/screenshots/intent-filter%20(3).png)

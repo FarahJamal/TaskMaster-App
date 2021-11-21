@@ -132,7 +132,6 @@
         />
 
     <ImageView
-android:visibility="invisible"
         android:id="@+id/IdProf"
         android:layout_width="113dp"
         android:layout_height="68dp"
@@ -159,6 +158,7 @@ android:visibility="invisible"
         app:layout_constraintVertical_bias="0.68" />
 
     <Button
+        android:visibility="invisible"
         android:id="@+id/up_f"
         android:text="upload file"
         android:onClick="upload_file"
