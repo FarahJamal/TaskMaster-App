@@ -31,12 +31,18 @@ public final class TaskMaster implements Model {
   public static final QueryField BODY = field("TaskMaster", "body");
   public static final QueryField STATUS = field("TaskMaster", "status");
   public static final QueryField S3_IMAGE_KEY = field("TaskMaster", "s3ImageKey");
+  public static final QueryField LOCATION = field("TaskMaster", "location");
+  public static final QueryField LATITUDE = field("TaskMaster", "latitude");
+  public static final QueryField LONGITUDE = field("TaskMaster", "longitude");
   public static final QueryField TEAM_ID = field("TaskMaster", "teamID");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String", isRequired = true) String title;
   private final @ModelField(targetType="String") String body;
   private final @ModelField(targetType="Status", isRequired = true) Status status;
   private final @ModelField(targetType="String") String s3ImageKey;
+  private final @ModelField(targetType="String") String location;
+  private final @ModelField(targetType="Float") Double latitude;
+  private final @ModelField(targetType="Float") Double longitude;
   private final @ModelField(targetType="ID", isRequired = true) String teamID;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime createdAt;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime updatedAt;
@@ -60,6 +66,18 @@ public final class TaskMaster implements Model {
       return s3ImageKey;
   }
   
+  public String getLocation() {
+      return location;
+  }
+  
+  public Double getLatitude() {
+      return latitude;
+  }
+  
+  public Double getLongitude() {
+      return longitude;
+  }
+  
   public String getTeamId() {
       return teamID;
   }
@@ -72,12 +90,15 @@ public final class TaskMaster implements Model {
       return updatedAt;
   }
   
-  private TaskMaster(String id, String title, String body, Status status, String s3ImageKey, String teamID) {
+  private TaskMaster(String id, String title, String body, Status status, String s3ImageKey, String location, Double latitude, Double longitude, String teamID) {
     this.id = id;
     this.title = title;
     this.body = body;
     this.status = status;
     this.s3ImageKey = s3ImageKey;
+    this.location = location;
+    this.latitude = latitude;
+    this.longitude = longitude;
     this.teamID = teamID;
   }
   
@@ -94,6 +115,9 @@ public final class TaskMaster implements Model {
               ObjectsCompat.equals(getBody(), taskMaster.getBody()) &&
               ObjectsCompat.equals(getStatus(), taskMaster.getStatus()) &&
               ObjectsCompat.equals(getS3ImageKey(), taskMaster.getS3ImageKey()) &&
+              ObjectsCompat.equals(getLocation(), taskMaster.getLocation()) &&
+              ObjectsCompat.equals(getLatitude(), taskMaster.getLatitude()) &&
+              ObjectsCompat.equals(getLongitude(), taskMaster.getLongitude()) &&
               ObjectsCompat.equals(getTeamId(), taskMaster.getTeamId()) &&
               ObjectsCompat.equals(getCreatedAt(), taskMaster.getCreatedAt()) &&
               ObjectsCompat.equals(getUpdatedAt(), taskMaster.getUpdatedAt());
@@ -108,6 +132,9 @@ public final class TaskMaster implements Model {
       .append(getBody())
       .append(getStatus())
       .append(getS3ImageKey())
+      .append(getLocation())
+      .append(getLatitude())
+      .append(getLongitude())
       .append(getTeamId())
       .append(getCreatedAt())
       .append(getUpdatedAt())
@@ -124,6 +151,9 @@ public final class TaskMaster implements Model {
       .append("body=" + String.valueOf(getBody()) + ", ")
       .append("status=" + String.valueOf(getStatus()) + ", ")
       .append("s3ImageKey=" + String.valueOf(getS3ImageKey()) + ", ")
+      .append("location=" + String.valueOf(getLocation()) + ", ")
+      .append("latitude=" + String.valueOf(getLatitude()) + ", ")
+      .append("longitude=" + String.valueOf(getLongitude()) + ", ")
       .append("teamID=" + String.valueOf(getTeamId()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("updatedAt=" + String.valueOf(getUpdatedAt()))
@@ -150,6 +180,9 @@ public final class TaskMaster implements Model {
       null,
       null,
       null,
+      null,
+      null,
+      null,
       null
     );
   }
@@ -160,6 +193,9 @@ public final class TaskMaster implements Model {
       body,
       status,
       s3ImageKey,
+      location,
+      latitude,
+      longitude,
       teamID);
   }
   public interface TitleStep {
@@ -182,6 +218,9 @@ public final class TaskMaster implements Model {
     BuildStep id(String id);
     BuildStep body(String body);
     BuildStep s3ImageKey(String s3ImageKey);
+    BuildStep location(String location);
+    BuildStep latitude(Double latitude);
+    BuildStep longitude(Double longitude);
   }
   
 
@@ -192,6 +231,9 @@ public final class TaskMaster implements Model {
     private String teamID;
     private String body;
     private String s3ImageKey;
+    private String location;
+    private Double latitude;
+    private Double longitude;
     @Override
      public TaskMaster build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
@@ -202,6 +244,9 @@ public final class TaskMaster implements Model {
           body,
           status,
           s3ImageKey,
+          location,
+          latitude,
+          longitude,
           teamID);
     }
     
@@ -238,6 +283,24 @@ public final class TaskMaster implements Model {
         return this;
     }
     
+    @Override
+     public BuildStep location(String location) {
+        this.location = location;
+        return this;
+    }
+    
+    @Override
+     public BuildStep latitude(Double latitude) {
+        this.latitude = latitude;
+        return this;
+    }
+    
+    @Override
+     public BuildStep longitude(Double longitude) {
+        this.longitude = longitude;
+        return this;
+    }
+    
     /** 
      * @param id id
      * @return Current Builder instance, for fluent method chaining
@@ -250,13 +313,16 @@ public final class TaskMaster implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String title, String body, Status status, String s3ImageKey, String teamId) {
+    private CopyOfBuilder(String id, String title, String body, Status status, String s3ImageKey, String location, Double latitude, Double longitude, String teamId) {
       super.id(id);
       super.title(title)
         .status(status)
         .teamId(teamId)
         .body(body)
-        .s3ImageKey(s3ImageKey);
+        .s3ImageKey(s3ImageKey)
+        .location(location)
+        .latitude(latitude)
+        .longitude(longitude);
     }
     
     @Override
@@ -282,6 +348,21 @@ public final class TaskMaster implements Model {
     @Override
      public CopyOfBuilder s3ImageKey(String s3ImageKey) {
       return (CopyOfBuilder) super.s3ImageKey(s3ImageKey);
+    }
+    
+    @Override
+     public CopyOfBuilder location(String location) {
+      return (CopyOfBuilder) super.location(location);
+    }
+    
+    @Override
+     public CopyOfBuilder latitude(Double latitude) {
+      return (CopyOfBuilder) super.latitude(latitude);
+    }
+    
+    @Override
+     public CopyOfBuilder longitude(Double longitude) {
+      return (CopyOfBuilder) super.longitude(longitude);
     }
   }
   

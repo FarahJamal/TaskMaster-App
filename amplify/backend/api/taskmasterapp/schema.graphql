@@ -11,6 +11,9 @@ type TaskMaster @model @key(name: "byTeam", fields: ["teamID", "title"]) @auth(r
   body: String
   status: Status!
   s3ImageKey: String
+  location: String
+  latitude: Float
+  longitude: Float
   teamID: ID!
 }
 
