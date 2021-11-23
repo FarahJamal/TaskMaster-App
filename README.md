@@ -108,9 +108,13 @@ We’ll continue to work with Amplify to add more cloud functionality for the re
 ![](/screenshots/intent-filter%20(2).png)
 ![](/screenshots/intent-filter%20(3).png)
 
-## lab 41
+## lab 42
 **google Maps**
 ### in this Lab I faced problem with emulator location cause emulator has default location so I've used blue-stacks emulator and works fine 👍👍
 
 ![](/screenshots/real-map.png)
 ![](/screenshots/emulator-map.png)
+
+## lab 43
+**add analytics to the App and review users on it!**
+![](/screenshots/43.png)
