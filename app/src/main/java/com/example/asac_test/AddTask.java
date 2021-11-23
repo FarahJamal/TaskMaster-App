@@ -45,6 +45,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.Callback;
+import com.amazonaws.mobile.client.UserStateDetails;
+import com.amazonaws.mobile.config.AWSConfiguration;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
@@ -85,6 +91,33 @@ import java.util.Comparator;
 import java.util.List;
 
 public class AddTask extends AppCompatActivity implements AdapterView.OnItemSelectedListener, OnMapReadyCallback {
+    public static PinpointManager pinpointManager;
+
+    public static PinpointManager getPinpointManager(final Context applicationContext) {
+        if (pinpointManager == null) {
+            // Initialize the AWS Mobile Client
+            final AWSConfiguration awsConfig = new AWSConfiguration(applicationContext);
+            AWSMobileClient.getInstance().initialize(applicationContext, awsConfig, new Callback<UserStateDetails>() {
+                @Override
+                public void onResult(UserStateDetails userStateDetails) {
+                    Log.i("INIT", userStateDetails.getUserState().toString());
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    Log.e("INIT", "Initialization error.", e);
+                }
+            });
+
+            PinpointConfiguration pinpointConfig = new PinpointConfiguration(
+                    applicationContext,
+                    AWSMobileClient.getInstance(),
+                    awsConfig);
+
+            pinpointManager = new PinpointManager(pinpointConfig);
+        }
+        return pinpointManager;
+    }
     private static final String TAG ="AddTask" ;
     private static final int PERMISSION_ID = 44;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -117,6 +150,8 @@ public class AddTask extends AppCompatActivity implements AdapterView.OnItemSele
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+        final PinpointManager pinpointManager = getPinpointManager(getApplicationContext());
+        pinpointManager.getSessionClient().startSession();
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
@@ -601,5 +636,12 @@ File fileToUpload;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        pinpointManager.getSessionClient().stopSession();
+        pinpointManager.getAnalyticsClient().submitEvents();
     }
 }

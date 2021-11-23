@@ -44,6 +44,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:29.0.0')
     implementation 'com.amazonaws:aws-android-sdk-core:2.2.+'
     implementation 'com.amazonaws:aws-android-sdk-lambda:2.2.+'
+    implementation 'com.google.firebase:firebase-ads:20.1.0'
 
 
     implementation 'com.amplifyframework:aws-analytics-pinpoint:1.29.1'
@@ -58,7 +59,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
 
     implementation 'com.amazonaws:aws-android-sdk-pinpoint:2.33.0'
-    implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.35.0'
+    implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.33.0'
 
     implementation 'com.amplifyframework:aws-storage-s3:1.28.3'
     implementation 'com.amplifyframework:aws-auth-cognito:1.28.3'
